@@ -26,8 +26,8 @@ enum GamePhase {
 }
 
 export type Round = {
-  player1: {name: string, score: number};
-  player2: {name: string, score: number};
+  player1: { name: string, score: number };
+  player2: { name: string, score: number };
   winner: string | null;
 }
 
@@ -59,32 +59,48 @@ function Game() {
 
   return (
     <Container disableGutters >
-      <Typography variant="h3" textAlign="center" textTransform="uppercase" m={1}>
-        Crokinolesque
-      </Typography>
-      <Box width={150} height={150} margin="20px auto 50px auto">
-        <img src={Logo} alt='Logo'/>
-      </Box>
-      {phase === GamePhase.Initialization && <Initialization moveToNextPhase={launchGame}/>}
-      {phase === GamePhase.Ongoing && <Ongoing 
-        player1Name={player1Name} 
-        player2Name={player2Name} 
+      {phase === GamePhase.Ongoing && 
+        <Box display="flex" justifyContent="center" mt={2} mb={2}>
+          <Box display="flex" alignContent="center">
+            <img src={Logo} alt='Logo' width={50} />
+            <Typography variant="h5" component="span" textAlign="center" textTransform="uppercase" m={1}>
+              Crokinolesque
+            </Typography>
+          </Box>
+        </Box>
+        }
+
+      {phase === GamePhase.Initialization &&
+        <>
+          <Typography variant="h4" textAlign="center" textTransform="uppercase" m={1}>
+            Crokinolesque
+          </Typography>
+
+          <Box width={150} height={150} margin="20px auto 50px auto">
+            <img src={Logo} alt='Logo' />
+          </Box>
+        </>
+      }
+      {phase === GamePhase.Initialization && <Initialization moveToNextPhase={launchGame} />}
+      {phase === GamePhase.Ongoing && <Ongoing
+        player1Name={player1Name}
+        player2Name={player2Name}
         player1Score={player1Score}
         player2Score={player2Score}
         setPlayer1Score={setPlayer1Score}
         setPlayer2Score={setPlayer2Score}
-        firstPlayer={firstPlayer} 
+        firstPlayer={firstPlayer}
         moveToNextPhase={finishGame}
         saveRound={saveRound}
-        />}
-      {phase === GamePhase.GameOver && <GameOver 
-        winnerName={winnerName} 
-        winnerScore={player1Name === winnerName ? player1Score : player2Score} 
-        looserScore={player1Name === winnerName ? player2Score : player1Score} 
+      />}
+      {phase === GamePhase.GameOver && <GameOver
+        winnerName={winnerName}
+        winnerScore={player1Name === winnerName ? player1Score : player2Score}
+        looserScore={player1Name === winnerName ? player2Score : player1Score}
         rounds={rounds}
         player1Name={player1Name}
         player2Name={player2Name}
-        />}
+      />}
     </Container>
   );
 }

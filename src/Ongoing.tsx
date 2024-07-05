@@ -106,7 +106,7 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
                 <Box display="flex" justifyContent="space-around" mt={2}>
                     <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player1Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player1Name)}>{player1Name}</Button>
                     <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player2Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player2Name)}>{player2Name}</Button>
-                    <Button variant="contained" color="inherit" onClick={() => setRoundAsDraw()}>Personne</Button>
+                    <Button variant="contained" color="inherit" onClick={() => setRoundAsDraw()}>Egalité</Button>
                 </Box>
                 
                 {roundWinner !== null && 
@@ -119,7 +119,7 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
                             InputProps={{
                                 startAdornment: (<InputAdornment position="start"><PinIcon /></InputAdornment>),
                             }} 
-                            inputProps={{min: 0, max: 240, style: {textAlign: 'right', fontSize: '2rem'}}}
+                            inputProps={{min: 0, max: 240, style: {textAlign: 'right', fontSize: '1.8rem'}}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => setRoundPoints(Number(event.target.value))}
                             inputRef={input => input && input.focus()}
                         />
