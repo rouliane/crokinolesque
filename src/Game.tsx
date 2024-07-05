@@ -25,6 +25,12 @@ enum GamePhase {
   GameOver
 }
 
+export type Round = {
+  player1: {name: string, score: number};
+  player2: {name: string, score: number};
+  winner: string | null;
+}
+
 function Game() {
   const [phase, setPhase] = useState(GamePhase.Initialization);
   const [player1Name, setPlayer1Name] = useState('');
@@ -33,11 +39,17 @@ function Game() {
   const [player2Score, setPlayer2Score] = useState(0);
   const [winnerName, setWinnerName] = useState('');
   const firstPlayer = Math.random() < 0.5 ? player1Name : player2Name;
+  const [rounds, setRounds] = useState<Round[]>([]);
 
   const launchGame = (player1Name: string, player2Name: string) => {
     setPlayer1Name(player1Name);
     setPlayer2Name(player2Name);
     setPhase(GamePhase.Ongoing);
+  }
+
+  const saveRound = (round: Round) => {
+    const newRounds = [...rounds, round];
+    setRounds(newRounds);
   }
 
   const finishGame = (winner: string) => {
@@ -62,8 +74,17 @@ function Game() {
         setPlayer1Score={setPlayer1Score}
         setPlayer2Score={setPlayer2Score}
         firstPlayer={firstPlayer} 
-        moveToNextPhase={finishGame}/>}
-      {phase === GamePhase.GameOver && <GameOver winnerName={winnerName} winnerScore={player1Name === winnerName ? player1Score : player2Score} looserScore={player1Name === winnerName ? player2Score : player1Score}/>}
+        moveToNextPhase={finishGame}
+        saveRound={saveRound}
+        />}
+      {phase === GamePhase.GameOver && <GameOver 
+        winnerName={winnerName} 
+        winnerScore={player1Name === winnerName ? player1Score : player2Score} 
+        looserScore={player1Name === winnerName ? player2Score : player1Score} 
+        rounds={rounds}
+        player1Name={player1Name}
+        player2Name={player2Name}
+        />}
     </Container>
   );
 }

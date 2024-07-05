@@ -12,6 +12,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import PinIcon from '@mui/icons-material/Pin';
 import InputAdornment from '@mui/material/InputAdornment';
+import { Round } from "./Game";
 
 type Props = {
     player1Name: string;
@@ -22,9 +23,10 @@ type Props = {
     setPlayer1Score: (score: number) => void;
     setPlayer2Score: (score: number) => void;
     moveToNextPhase: (winnerName: string) => void;
+    saveRound: (round: Round) => void;
 }
 
-export default function Ongoing({ player1Name, player2Name, firstPlayer, player1Score, player2Score, setPlayer1Score, setPlayer2Score, moveToNextPhase}: Props) {
+export default function Ongoing({ player1Name, player2Name, firstPlayer, player1Score, player2Score, setPlayer1Score, setPlayer2Score, moveToNextPhase, saveRound}: Props) {
     const [currentPlayer, setCurrentPlayer] = useState(firstPlayer);
     const [roundPoints, setRoundPoints] = useState<null | number>(null);
     const [roundWinner, setRoundWinner] = useState<null|string>(null);
@@ -33,10 +35,20 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
 
     const togglePlayer = () => setCurrentPlayer(currentPlayer === player1Name ? player2Name : player1Name);
 
+    const addRound = (player1Score: number, player2Score: number) => {
+        const newRound: Round = {
+            player1: {name: player1Name, score: player1Score},
+            player2: {name: player2Name, score: player2Score},
+            winner: roundWinner
+        };
+        saveRound(newRound);
+    }
+
     const validateRound = () => {
         if (roundWinner === player1Name) {
             const player1NewScore = player1Score + Number(roundPoints);
             setPlayer1Score(player1NewScore);
+            addRound(player1NewScore, player2Score);
             if (player1NewScore >= 100) {
                 moveToNextPhase(player1Name);
                 return;
@@ -44,6 +56,7 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
         } else {
             const player2NewScore = player2Score + Number(roundPoints);
             setPlayer2Score(player2NewScore);
+            addRound(player1Score, player2NewScore);
             if (player2NewScore >= 100) {
                 moveToNextPhase(player2Name);
                 return;
@@ -59,6 +72,7 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
         setRoundWinner(null);
         togglePlayer();
         setRoundPoints(null);
+        addRound(player1Score, player2Score);
     }
 
     return (
