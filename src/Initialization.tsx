@@ -32,7 +32,7 @@ export default function Initialization({ moveToNextPhase }: Props) {
                 tabIndex={2}
             />
 
-            <Button variant='contained' size='large' onClick={() => moveToNextPhase(player1Name, player2Name)} endIcon={<StartIcon />}>Commencer</Button>
+            <Button disabled={player1Name.trim() === '' || player2Name.trim() === ''} variant='contained' size='large' onClick={() => moveToNextPhase(player1Name, player2Name)} endIcon={<StartIcon />}>Commencer</Button>
         </Box>
     );
 }
