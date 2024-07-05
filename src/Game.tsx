@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import Initialization from './Initialization';
 import GameOver from './GameOver';
 import Ongoing from './Ongoing';
+import Logo from './logo.png';
 
 /**
  * game rules :
@@ -30,14 +34,26 @@ function Game() {
   const [winnerName, setWinnerName] = useState('');
   const firstPlayer = Math.random() < 0.5 ? player1Name : player2Name;
 
+  const launchGame = (player1Name: string, player2Name: string) => {
+    setPlayer1Name(player1Name);
+    setPlayer2Name(player2Name);
+    setPhase(GamePhase.Ongoing);
+  }
+
   const finishGame = (winner: string) => {
     setWinnerName(winner);
     setPhase(GamePhase.GameOver);
   }
 
   return (
-    <div>
-      {phase === GamePhase.Initialization && <Initialization moveToNextPhase={() => setPhase(GamePhase.Ongoing)} setPlayer1Name={setPlayer1Name} setPlayer2Name={setPlayer2Name}/>}
+    <Container disableGutters >
+      <Typography variant="h3" textAlign="center" textTransform="uppercase" m={1}>
+        Crokinolesque
+      </Typography>
+      <Box width={150} height={150} margin="20px auto 50px auto">
+        <img src={Logo} alt='Logo'/>
+      </Box>
+      {phase === GamePhase.Initialization && <Initialization moveToNextPhase={launchGame}/>}
       {phase === GamePhase.Ongoing && <Ongoing 
         player1Name={player1Name} 
         player2Name={player2Name} 
@@ -48,7 +64,7 @@ function Game() {
         firstPlayer={firstPlayer} 
         moveToNextPhase={finishGame}/>}
       {phase === GamePhase.GameOver && <GameOver winnerName={winnerName} winnerScore={player1Name === winnerName ? player1Score : player2Score} looserScore={player1Name === winnerName ? player2Score : player1Score}/>}
-    </div>
+    </Container>
   );
 }
 

@@ -1,4 +1,17 @@
 import React, { ChangeEvent, useState } from "react";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import PinIcon from '@mui/icons-material/Pin';
+import InputAdornment from '@mui/material/InputAdornment';
 
 type Props = {
     player1Name: string;
@@ -40,36 +53,52 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
     }
 
     return (
-        <div>
-            <p>
-                {player1Name} {isCurrentPlayer(player1Name) ? '*' : ''} : {player1Score}
+        <Container>
+            <List>
+                <ListItem disablePadding disableGutters>
+                    <ListItemButton disableGutters>
+                        <ListItemIcon>
+                            {isCurrentPlayer(player1Name) && <ArrowForwardIcon />}
+                        </ListItemIcon>
+                        <ListItemText>
+                            <Typography variant="h5">{player1Name} : {player1Score}</Typography>
+                        </ListItemText>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding disableGutters>
+                    <ListItemButton disableGutters>
+                        <ListItemIcon>
+                            {isCurrentPlayer(player2Name) && <ArrowForwardIcon />}
+                        </ListItemIcon>
+                        <ListItemText>
+                            <Typography variant="h5">{player2Name} : {player2Score}</Typography>
+                        </ListItemText>
+                    </ListItemButton>
+                </ListItem>
+            </List>
 
-            </p>
-            <p>
-                {player2Name} {isCurrentPlayer(player2Name) ? '*' : ''} : {player2Score}
-            </p>
-
-            <div>
-                <p>Qui a gagné cette manche ?</p>
+            <Box mt={3}>
+                <Typography variant="h5" textAlign="center">Qui a gagné cette manche ?</Typography>
                 
-                
-                <label htmlFor="winnerIsPlayer1">{player1Name}</label>
-                <input type="radio" name="roundWinner" id="winnerIsPlayer1" value="winnerIsPlayer1" checked={roundWinner === player1Name} onClick={() => setRoundWinner(player1Name)}/>
-                
-                <label htmlFor="winnerIsPlayer2">{player2Name}</label>
-                <input type="radio" name="roundWinner" id="winnerIsPlayer2" value="winnerIsPlayer2" checked={roundWinner === player2Name} onClick={() => setRoundWinner(player2Name)}/>
+                <Box display="flex" justifyContent="space-around" mt={2}>
+                    <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player1Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player1Name)}>{player1Name}</Button>
+                    <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player2Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player2Name)}>{player2Name}</Button>
+                </Box>
                 
                 {roundWinner !== null && 
-                    <>
-                    <div>
-                        <label htmlFor="winnerPoints">Points</label>
-                        <input type="number" max={240} min={0} id="winnerPoints" value={roundPoints === null ? '' : roundPoints} onChange={(event: ChangeEvent<HTMLInputElement>) => setRoundPoints(Number(event.target.value))}/>
-                    </div>
-
-                    <button onClick={validateRound}>Valider</button>
-                    </>
+                    <Box display="flex" flexDirection="column" alignItems="center" gap={5} mt={5}>
+                        <TextField
+                            type="number"
+                            label="Points" 
+                            variant="outlined" 
+                            InputProps={{startAdornment: (<InputAdornment position="start"><PinIcon /></InputAdornment>)}} 
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => setRoundPoints(Number(event.target.value))}
+                            inputRef={input => input && input.focus()}
+                        />
+                        <Button variant="contained" size="large" onClick={validateRound}>Valider</Button>
+                    </Box>
                 }
-            </div>
-        </div>
+            </Box>
+        </Container>
     );
 }
