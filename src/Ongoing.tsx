@@ -31,24 +31,33 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
 
     const isCurrentPlayer = (player: string) => player === currentPlayer;
 
+    const togglePlayer = () => setCurrentPlayer(currentPlayer === player1Name ? player2Name : player1Name);
+
     const validateRound = () => {
-        const player1NewScore = player1Score + Number(roundPoints);
-        const player2NewScore = player2Score + Number(roundPoints);
-
         if (roundWinner === player1Name) {
+            const player1NewScore = player1Score + Number(roundPoints);
             setPlayer1Score(player1NewScore);
+            if (player1NewScore >= 100) {
+                moveToNextPhase(player1Name);
+                return;
+            }
         } else {
+            const player2NewScore = player2Score + Number(roundPoints);
             setPlayer2Score(player2NewScore);
-        }
-
-        if (roundWinner !== null && (player1NewScore >= 100 || player2NewScore >= 100)) {
-            moveToNextPhase(roundWinner);
-            return;
-        }
-        
+            if (player2NewScore >= 100) {
+                moveToNextPhase(player2Name);
+                return;
+            }
+        }        
 
         setRoundWinner(null);
-        setCurrentPlayer(currentPlayer === player1Name ? player2Name : player1Name);
+        togglePlayer();
+        setRoundPoints(null);
+    }
+
+    const setRoundAsDraw = () => {
+        setRoundWinner(null);
+        togglePlayer();
         setRoundPoints(null);
     }
 
@@ -83,19 +92,24 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
                 <Box display="flex" justifyContent="space-around" mt={2}>
                     <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player1Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player1Name)}>{player1Name}</Button>
                     <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player2Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player2Name)}>{player2Name}</Button>
+                    <Button variant="contained" color="inherit" onClick={() => setRoundAsDraw()}>Personne</Button>
                 </Box>
                 
                 {roundWinner !== null && 
                     <Box display="flex" flexDirection="column" alignItems="center" gap={5} mt={5}>
                         <TextField
+                            sx={{width: 150}}
                             type="number"
                             label="Points" 
                             variant="outlined" 
-                            InputProps={{startAdornment: (<InputAdornment position="start"><PinIcon /></InputAdornment>)}} 
+                            InputProps={{
+                                startAdornment: (<InputAdornment position="start"><PinIcon /></InputAdornment>),
+                            }} 
+                            inputProps={{min: 0, max: 240, style: {textAlign: 'right', fontSize: '2rem'}}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => setRoundPoints(Number(event.target.value))}
                             inputRef={input => input && input.focus()}
                         />
-                        <Button variant="contained" size="large" onClick={validateRound}>Valider</Button>
+                        <Button disabled={roundPoints === null} variant="contained" size="large" onClick={validateRound}>Valider</Button>
                     </Box>
                 }
             </Box>
