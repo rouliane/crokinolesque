@@ -59,7 +59,7 @@ function Game() {
 
   return (
     <Container disableGutters >
-      {phase === GamePhase.Ongoing && 
+      {phase !== GamePhase.Initialization && 
         <Box display="flex" justifyContent="center" mt={2} mb={2}>
           <Box display="flex" alignContent="center">
             <img src={Logo} alt='Logo' width={50} />
