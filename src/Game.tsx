@@ -6,6 +6,7 @@ import Initialization from './Initialization';
 import GameOver from './GameOver';
 import Ongoing from './Ongoing';
 import Logo from './logo.png';
+import Snackbar from '@mui/material/Snackbar';
 
 /**
  * game rules :
@@ -40,11 +41,13 @@ function Game() {
   const [winnerName, setWinnerName] = useState('');
   const firstPlayer = Math.random() < 0.5 ? player1Name : player2Name;
   const [rounds, setRounds] = useState<Round[]>([]);
+  const [showFirstPlayerAlert, setFirstPlayerAlert] = useState(false);
 
   const launchGame = (player1Name: string, player2Name: string) => {
     setPlayer1Name(player1Name);
     setPlayer2Name(player2Name);
     setPhase(GamePhase.Ongoing);
+    setFirstPlayerAlert(true);
   }
 
   const saveRound = (round: Round) => {
@@ -55,6 +58,13 @@ function Game() {
   const finishGame = (winner: string) => {
     setWinnerName(winner);
     setPhase(GamePhase.GameOver);
+  }
+
+  const handleCloseFirstPlayerAlert = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setFirstPlayerAlert(false);
   }
 
   return (
@@ -102,6 +112,13 @@ function Game() {
         player1Name={player1Name}
         player2Name={player2Name}
       />}
+
+        <Snackbar
+        open={showFirstPlayerAlert}
+        autoHideDuration={5000}
+        onClose={handleCloseFirstPlayerAlert}
+        message={`Le premier joueur sera ${firstPlayer}`}
+      />
     </Container>
   );
 }
