@@ -29,5 +29,12 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm run all-tests
+    - name: Check Secret Availability
+      run: |
+          if [ -z "${{ secrets.VERCEL_WEBHOOK_URL }}" ]; then
+            echo "VERCEL_WEBHOOK_URL secret is not set."
+          else
+            echo "VERCEL_WEBHOOK_URL secret is available."
+          fi
     - name: Deploy to Vercel
       run: curl -X POST ${{ secrets.VERCEL_WEBHOOK_URL }}
