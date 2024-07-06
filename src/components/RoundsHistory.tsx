@@ -4,7 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Round } from "./Game";
+import {Round} from "../hooks/useGame";
 
 type Props = {
     rounds: Round[];
@@ -26,8 +26,8 @@ export default function RoundsHistory({ rounds, player1Name, player2Name }: Prop
                 {rounds.map((round, index) => (
                     <TableRow key={index} sx={index % 2 !== 0 ? { backgroundColor: 'action.hover' } : {}}>
                         <TableCell align="center">{index + 1}</TableCell>
-                        <TableCell align="center">{round.player1.score}</TableCell>
-                        <TableCell align="center">{round.player2.score}</TableCell>
+                        <TableCell align="center">{round.player1Score}</TableCell>
+                        <TableCell align="center">{round.player2Score}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
