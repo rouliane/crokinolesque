@@ -11,6 +11,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Round } from "./Game";
+import RoundsHistory from "./RoundsHistory";
+import TableContainer from '@mui/material/TableContainer';
+import Paper from '@mui/material/Paper';
 
 type Props = {
     player1Name: string;
@@ -22,9 +25,10 @@ type Props = {
     setPlayer2Score: (score: number) => void;
     moveToNextPhase: (winnerName: string) => void;
     saveRound: (round: Round) => void;
+    rounds: Round[];
 }
 
-export default function Ongoing({ player1Name, player2Name, firstPlayer, player1Score, player2Score, setPlayer1Score, setPlayer2Score, moveToNextPhase, saveRound}: Props) {
+export default function Ongoing({ player1Name, player2Name, firstPlayer, player1Score, player2Score, setPlayer1Score, setPlayer2Score, moveToNextPhase, saveRound, rounds}: Props) {
     const [currentPlayer, setCurrentPlayer] = useState(firstPlayer);
     const [roundPoints, setRoundPoints] = useState<null | number>(null);
     const [roundWinner, setRoundWinner] = useState<null|string>(null);
@@ -126,7 +130,7 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
                             type="number"
                             label="Points" 
                             variant="outlined"
-                            inputProps={{min: 0, max: 240, style: {textAlign: 'center', fontSize: '1.7rem'}}}
+                            inputProps={{min: 0, max: 240, style: {textAlign: 'center', fontSize: '1.5rem'}}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => handleScoreChange(event)}
                             onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => validateRoundWithEnterKey(event)}
                             inputRef={input => input && input.focus()}
@@ -135,6 +139,15 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
                     </Box>
                 }
             </Box>
+
+            {rounds.length > 0 && 
+                <Box textAlign="center">
+                    <Typography variant="h6" mt={5}>Historique</Typography>
+                    <TableContainer component={Paper} sx={{ marginTop: 2 }}>
+                        <RoundsHistory rounds={rounds} player1Name={player1Name} player2Name={player2Name} />
+                    </TableContainer>
+                </Box>
+            }
         </Container>
     );
 }

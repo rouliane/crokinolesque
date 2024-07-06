@@ -3,13 +3,9 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Round } from "./Game";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import RoundsHistory from "./RoundsHistory";
 
 type Props = {
     winnerName: string;
@@ -29,24 +25,7 @@ export default function GameOver({winnerName, winnerScore, looserScore, rounds, 
       <Typography variant="h6" mt={5}>Historique</Typography>
 
       <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell width={20}>Manche</TableCell>
-              <TableCell align="center">{player1Name}</TableCell>
-              <TableCell align="center">{player2Name}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rounds.map((round, index) => (
-              <TableRow key={index} sx={index %2 !== 0 ? {backgroundColor: 'action.hover'} : {}}>
-                <TableCell align="center">{index + 1}</TableCell>
-                <TableCell align="center">{round.player1.score}</TableCell>
-                <TableCell align="center">{round.player2.score}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <RoundsHistory rounds={rounds} player1Name={player1Name} player2Name={player2Name} />
       </TableContainer>
 
     </Container>

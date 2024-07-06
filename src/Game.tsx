@@ -92,6 +92,7 @@ function Game() {
         firstPlayer={firstPlayer}
         moveToNextPhase={finishGame}
         saveRound={saveRound}
+        rounds={rounds}
       />}
       {phase === GamePhase.GameOver && <GameOver
         winnerName={winnerName}
