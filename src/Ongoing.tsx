@@ -126,7 +126,7 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
                             type="number"
                             label="Points" 
                             variant="outlined"
-                            inputProps={{min: 0, max: 240, style: {textAlign: 'center', fontSize: '1.8rem'}}}
+                            inputProps={{min: 0, max: 240, style: {textAlign: 'center', fontSize: '1.7rem'}}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => handleScoreChange(event)}
                             onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => validateRoundWithEnterKey(event)}
                             inputRef={input => input && input.focus()}
