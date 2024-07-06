@@ -10,8 +10,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import PinIcon from '@mui/icons-material/Pin';
-import InputAdornment from '@mui/material/InputAdornment';
 import { Round } from "./Game";
 
 type Props = {
@@ -77,6 +75,16 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
 
     const isRoundScoreValid = roundPoints !== null && roundPoints > 0 && roundPoints <= 240 && roundPoints % 5 === 0;
 
+    const handleScoreChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        setRoundPoints(Number(event.target.value));
+    }
+
+    const validateRoundWithEnterKey = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (event.key === "Enter" && isRoundScoreValid) {
+            validateRound();
+        }
+    }
+
     return (
         <Container>
             <List>
@@ -119,7 +127,8 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
                             label="Points" 
                             variant="outlined"
                             inputProps={{min: 0, max: 240, style: {textAlign: 'center', fontSize: '1.8rem'}}}
-                            onChange={(event: ChangeEvent<HTMLInputElement>) => setRoundPoints(Number(event.target.value))}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => handleScoreChange(event)}
+                            onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => validateRoundWithEnterKey(event)}
                             inputRef={input => input && input.focus()}
                         />
                         <Button disabled={!isRoundScoreValid} variant="contained" size="large" onClick={validateRound}>Valider</Button>
