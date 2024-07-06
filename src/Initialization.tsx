@@ -14,6 +14,14 @@ export default function Initialization({ moveToNextPhase }: Props) {
     const [player1Name, setPlayer1Name] = useState('');
     const [player2Name, setPlayer2Name] = useState('');
     
+    const arePlayerNamesValid = player1Name.trim() !== '' && player2Name.trim() !== '';
+
+    const startGameWithEnterKey = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (event.key === "Enter" && arePlayerNamesValid) {
+            moveToNextPhase(player1Name, player2Name);
+        }
+    }
+
     return (
         <Box display="flex" flexDirection="column" alignItems="center" gap={5}>
             <TextField
@@ -21,6 +29,7 @@ export default function Initialization({ moveToNextPhase }: Props) {
                 variant="outlined" 
                 InputProps={{startAdornment: (<InputAdornment position="start"><PersonIcon /></InputAdornment>)}} 
                 onChange={(event: ChangeEvent<HTMLInputElement>) => setPlayer1Name(event.target.value)}
+                onKeyUp={startGameWithEnterKey}
                 tabIndex={1}
             />
 
@@ -29,10 +38,19 @@ export default function Initialization({ moveToNextPhase }: Props) {
                 variant="outlined" 
                 InputProps={{startAdornment: (<InputAdornment position="start"><PersonIcon /></InputAdornment>)}} 
                 onChange={(event: ChangeEvent<HTMLInputElement>) => setPlayer2Name(event.target.value)}
+                onKeyUp={startGameWithEnterKey}
                 tabIndex={2}
             />
 
-            <Button disabled={player1Name.trim() === '' || player2Name.trim() === ''} variant='contained' size='large' onClick={() => moveToNextPhase(player1Name, player2Name)} endIcon={<StartIcon />}>Commencer</Button>
+            <Button 
+                disabled={!arePlayerNamesValid} 
+                variant='contained' 
+                size='large' 
+                onClick={() => moveToNextPhase(player1Name, player2Name)} 
+                endIcon={<StartIcon />}
+            >
+                Commencer
+            </Button>
         </Box>
     );
 }
