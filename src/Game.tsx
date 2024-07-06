@@ -60,9 +60,9 @@ function Game() {
   return (
     <Container disableGutters >
       {phase !== GamePhase.Initialization && 
-        <Box display="flex" justifyContent="center" mt={2} mb={2}>
-          <Box display="flex" alignContent="center">
-            <img src={Logo} alt='Logo' width={50} />
+        <Box display="flex" justifyContent="center" mt={1} mb={1}>
+          <Box display="flex" alignContent="center" alignItems="center">
+            <img src={Logo} alt='Logo' width={30} height={30} />
             <Typography variant="h5" component="span" textAlign="center" textTransform="uppercase" m={1}>
               Crokinolesque
             </Typography>

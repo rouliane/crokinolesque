@@ -75,6 +75,8 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
         addRound(player1Score, player2Score);
     }
 
+    const isRoundScoreValid = roundPoints !== null && roundPoints > 0 && roundPoints <= 240 && roundPoints % 5 === 0;
+
     return (
         <Container>
             <List>
@@ -100,30 +102,27 @@ export default function Ongoing({ player1Name, player2Name, firstPlayer, player1
                 </ListItem>
             </List>
 
-            <Box mt={3}>
-                <Typography variant="h5" textAlign="center">Qui a gagné cette manche ?</Typography>
+            <Box mt={2}>
+                <Typography variant="h6" textAlign="center">Qui a gagné cette manche ?</Typography>
                 
-                <Box display="flex" justifyContent="space-around" mt={2}>
+                <Box display="flex" justifyContent="space-around" mt={1}>
                     <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player1Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player1Name)}>{player1Name}</Button>
                     <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player2Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player2Name)}>{player2Name}</Button>
                     <Button variant="contained" color="inherit" onClick={() => setRoundAsDraw()}>Egalité</Button>
                 </Box>
                 
                 {roundWinner !== null && 
-                    <Box display="flex" flexDirection="column" alignItems="center" gap={5} mt={5}>
+                    <Box display="flex" flexDirection="row" alignItems="center" gap={5} mt={5} justifyContent="center">
                         <TextField
-                            sx={{width: 150}}
+                            sx={{width: 110}}
                             type="number"
                             label="Points" 
-                            variant="outlined" 
-                            InputProps={{
-                                startAdornment: (<InputAdornment position="start"><PinIcon /></InputAdornment>),
-                            }} 
-                            inputProps={{min: 0, max: 240, style: {textAlign: 'right', fontSize: '1.8rem'}}}
+                            variant="outlined"
+                            inputProps={{min: 0, max: 240, style: {textAlign: 'center', fontSize: '1.8rem'}}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => setRoundPoints(Number(event.target.value))}
                             inputRef={input => input && input.focus()}
                         />
-                        <Button disabled={roundPoints === null} variant="contained" size="large" onClick={validateRound}>Valider</Button>
+                        <Button disabled={!isRoundScoreValid} variant="contained" size="large" onClick={validateRound}>Valider</Button>
                     </Box>
                 }
             </Box>
