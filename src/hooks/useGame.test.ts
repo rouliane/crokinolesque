@@ -4,7 +4,7 @@ import {GamePhase, useGame} from "./useGame";
 test('it returns the default application state', () => {
     const {result} = renderHook(() => useGame());
     expect(result.current.phase).toBe(GamePhase.Initialization);
-    expect(result.current.player1Name).toBe('a');
+    expect(result.current.player1Name).toBe('');
     expect(result.current.player2Name).toBe('');
     expect(result.current.currentPlayer).toBe('');
     expect(result.current.rounds).toEqual([]);
