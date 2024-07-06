@@ -86,8 +86,8 @@ function Game() {
             Crokinolesque
           </Typography>
 
-          <Box width={150} height={150} margin="20px auto 50px auto">
-            <img src={Logo} alt='Logo' />
+          <Box width={100} height={100} margin="20px auto 50px auto">
+            <img src={Logo} alt='Logo' width="100%" />
           </Box>
         </>
       }
