@@ -29,7 +29,7 @@ export default function GameOver({winnerName, winnerScore, looserScore, rounds, 
       <Typography variant="h6" mt={5}>Historique</Typography>
 
       <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-        <Table>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell width={20}>Manche</TableCell>
@@ -39,8 +39,8 @@ export default function GameOver({winnerName, winnerScore, looserScore, rounds, 
           </TableHead>
           <TableBody>
             {rounds.map((round, index) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
+              <TableRow key={index} sx={index %2 !== 0 ? {backgroundColor: 'action.hover'} : {}}>
+                <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{round.player1.score}</TableCell>
                 <TableCell align="center">{round.player2.score}</TableCell>
               </TableRow>
