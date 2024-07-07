@@ -24,7 +24,7 @@ export default function RoundsHistory({ rounds, player1Name, player2Name }: Prop
             </TableHead>
             <TableBody>
                 {rounds.map((round, index) => (
-                    <TableRow key={index} sx={index % 2 !== 0 ? { backgroundColor: 'action.hover' } : {}}>
+                    <TableRow key={index} sx={index % 2 !== 0 ? { backgroundColor: 'action.hover' } : {}} data-testid="roundHistoryEntry">
                         <TableCell align="center">{index + 1}</TableCell>
                         <TableCell align="center">{round.player1Score}</TableCell>
                         <TableCell align="center">{round.player2Score}</TableCell>

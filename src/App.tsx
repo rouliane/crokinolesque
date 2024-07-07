@@ -5,8 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import Game from './Game';
-import {GameProvider} from "../contexts/gameContext";
+import Game from './components/Game';
+import {GameProvider} from "./contexts/gameContext";
 
 type PaletteMode = 'light' | 'dark';
 
