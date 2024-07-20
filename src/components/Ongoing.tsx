@@ -43,6 +43,12 @@ export default function Ongoing() {
         setRoundWinner(null);
     }
 
+    const draw = () => {
+        endRoundWithADraw();
+        setRoundWinner(null);
+        setRoundPoints(null);
+    }
+
     return (
         <Container>
             <Header />
@@ -76,7 +82,7 @@ export default function Ongoing() {
                 <Box display="flex" justifyContent="space-around" mt={1}>
                     <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player1Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player1Name)}>{player1Name}</Button>
                     <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player2Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player2Name)}>{player2Name}</Button>
-                    <Button variant="contained" color="inherit" onClick={() => endRoundWithADraw()}>Egalité</Button>
+                    <Button variant="contained" color="inherit" onClick={draw}>Egalité</Button>
                 </Box>
 
                 {roundWinner !== null &&
