@@ -1,6 +1,11 @@
 import {render, screen} from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import App from "./App";
+import {GamePhase} from "./hooks/useGame";
+
+beforeEach(() => {
+    localStorage.clear();
+});
 
 test('the app is rendered', () => {
     render(<App />);
@@ -38,6 +43,26 @@ test('happy path', async () => {
         '3 20 40',
         '4 100 40'
     ]);
+});
+
+test('A game can be resumed and the players will be notified', async () => {
+    localStorage.setItem('gameState', JSON.stringify({
+        phase: GamePhase.Ongoing,
+        player1Name: 'Player 1',
+        player2Name: 'Player 2',
+        currentPlayer: 'Player 2',
+        rounds: [
+            {player1Score: 50, player2Score: 0, winner: 'Player 1'},
+            {player1Score: 50, player2Score: 0, winner: null},
+            {player1Score: 50, player2Score: 20, winner: 'Player 2'},
+        ],
+    }));
+
+    render(<App />);
+
+    gameScoreShouldNowBe(50, 20);
+
+    expect(screen.getByText(/Une partie non terminée a été chargée/i)).toBeInTheDocument();
 });
 
 async function player1WillBeCalled(playerName: string) {

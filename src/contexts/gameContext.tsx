@@ -14,6 +14,8 @@ interface GameContextType {
     currentPlayer: string;
     player1Score: number;
     player2Score: number;
+    isResumingGame: boolean;
+    setIsResumingGame: (isResumingGame: boolean) => void;
 }
 
 const GameContext = createContext<GameContextType>({
@@ -29,6 +31,8 @@ const GameContext = createContext<GameContextType>({
     currentPlayer: '',
     player1Score: 0,
     player2Score: 0,
+    isResumingGame: false,
+    setIsResumingGame: () => {},
 });
 
 const GameProvider = ({ children }: {children: any}) => {

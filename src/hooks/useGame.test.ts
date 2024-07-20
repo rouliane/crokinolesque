@@ -1,5 +1,9 @@
 import {act, renderHook} from "@testing-library/react";
-import {GamePhase, useGame} from "./useGame";
+import {GamePhase, GameState, useGame} from "./useGame";
+
+beforeEach(() => {
+    localStorage.clear();
+});
 
 test('it returns the default application state', () => {
     const {result} = renderHook(() => useGame());
@@ -89,4 +93,105 @@ test('it correctly saves multiple rounds', () => {
     ]);
     expect(result.current.player1Score).toBe(120);
     expect(result.current.player2Score).toBe(20);
+});
+
+test('it saves the game state in local storage when starting a new game', () => {
+    const {result} = renderHook(() => useGame());
+    act(() => result.current.setPlayer1Name('Player 1'));
+    act(() => result.current.setPlayer2Name('Player 2'));
+    act(() => result.current.launchGame());
+
+    const gameState: GameState = JSON.parse(localStorage.getItem('gameState') || '{}');
+    expect(gameState).toMatchObject({
+        phase: GamePhase.Ongoing,
+        player1Name: 'Player 1',
+        player2Name: 'Player 2',
+        currentPlayer: expect.stringMatching(/Player [12]/),
+        rounds: [],
+    });
+});
+
+test('it saves the game state in local storage when someones wins a round', () => {
+    const {result} = renderHook(() => useGame());
+    act(() => result.current.setPlayer1Name('Player 1'));
+    act(() => result.current.setPlayer2Name('Player 2'));
+    act(() => result.current.launchGame());
+    act(() => result.current.endRoundWithAWinner('Player 1', 50));
+
+    const gameState: GameState = JSON.parse(localStorage.getItem('gameState') || '{}');
+    expect(gameState).toMatchObject({
+        phase: GamePhase.Ongoing,
+        player1Name: 'Player 1',
+        player2Name: 'Player 2',
+        currentPlayer: expect.stringMatching(/Player [12]/),
+        rounds: [{player1Score: 50, player2Score: 0, winner: 'Player 1'},],
+    });
+});
+
+test('it saves the game state in local storage when drawing a round', () => {
+    const {result} = renderHook(() => useGame());
+    act(() => result.current.setPlayer1Name('Player 1'));
+    act(() => result.current.setPlayer2Name('Player 2'));
+    act(() => result.current.launchGame());
+    act(() => result.current.endRoundWithADraw());
+
+    const gameState: GameState = JSON.parse(localStorage.getItem('gameState') || '{}');
+    expect(gameState).toMatchObject({
+        phase: GamePhase.Ongoing,
+        player1Name: 'Player 1',
+        player2Name: 'Player 2',
+        currentPlayer: expect.stringMatching(/Player [12]/),
+        rounds: [{player1Score: 0, player2Score: 0, winner: null},],
+    });
+});
+
+test('it clears the game state in local storage when the game is finished', () => {
+    const {result} = renderHook(() => useGame());
+    act(() => result.current.setPlayer1Name('Player 1'));
+    act(() => result.current.setPlayer2Name('Player 2'));
+    act(() => result.current.launchGame());
+
+    act(() => result.current.endRoundWithAWinner('Player 1', 50));
+    act(() => result.current.endRoundWithAWinner('Player 2', 100));
+
+    expect(localStorage.getItem('gameState')).toBeNull();
+});
+
+test('it loads the previous game state when starting the application', () => {
+    localStorage.setItem('gameState', JSON.stringify({
+        phase: GamePhase.Ongoing,
+        player1Name: 'Player 1',
+        player2Name: 'Player 2',
+        currentPlayer: 'Player 2',
+        rounds: [
+            {player1Score: 50, player2Score: 0, winner: 'Player 1'},
+            {player1Score: 50, player2Score: 0, winner: null},
+            {player1Score: 50, player2Score: 20, winner: 'Player 2'},
+        ],
+    }));
+
+    const {result} = renderHook(() => useGame());
+
+    expect(result.current.player1Name).toBe('Player 1');
+    expect(result.current.player2Name).toBe('Player 2');
+    expect(result.current.phase).toBe(GamePhase.Ongoing);
+    expect(result.current.rounds).toEqual([
+        {player1Score: 50, player2Score: 0, winner: 'Player 1'},
+        {player1Score: 50, player2Score: 0, winner: null},
+        {player1Score: 50, player2Score: 20, winner: 'Player 2'},
+    ]);
+    expect(result.current.player1Score).toBe(50);
+    expect(result.current.player2Score).toBe(20);
+    expect(result.current.currentPlayer).toBe('Player 2');
+
+    act(() => result.current.launchGame());
+
+    const gameState: GameState = JSON.parse(localStorage.getItem('gameState') || '{}');
+    expect(gameState).toMatchObject({
+        phase: GamePhase.Ongoing,
+        player1Name: 'Player 1',
+        player2Name: 'Player 2',
+        currentPlayer: expect.stringMatching(/Player [12]/),
+        rounds: [],
+    });
 });
