@@ -36,7 +36,25 @@ export default function App() {
     };
 
     const theme = React.useMemo(
-        () => createTheme({palette: {mode: colorMode}}),
+        () => createTheme({
+            palette: {
+                mode: colorMode,
+                background: {
+                    default: colorMode === PaletteMode.light ? '#F8FAFC' : '#111A22',
+                    paper: colorMode === PaletteMode.light ? '#F8FAFC' : '#111A22',
+                },
+                // primary: {
+                //     main: '#1980E6',
+                // },
+            },
+            typography: {
+                fontFamily: '"Manrope", sans-serif',
+                fontWeightLight: 300,
+                fontWeightRegular: 500,
+                fontWeightMedium: 600,
+                fontWeightBold: 700,
+            }
+        }),
         [colorMode],
     );
 
@@ -54,8 +72,8 @@ export default function App() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <IconButton sx={{position: "fixed", top: "12px", left: "0px"}} onClick={handleClick} size="small">
-                <MenuIcon/>
+            <IconButton sx={{position: "fixed", top: "3px", left: "0px"}} onClick={handleClick} size="small">
+                <MenuIcon fontSize="large"/>
             </IconButton>
             <Menu
                 anchorEl={anchorEl}

@@ -9,7 +9,7 @@ beforeEach(() => {
 
 test('the app is rendered', () => {
     render(<App />);
-    expect(screen.getByText('Crokinolesque')).toBeInTheDocument();
+    expect(screen.getByText('Crokinole')).toBeInTheDocument();
 });
 
 test('happy path', async () => {
@@ -66,13 +66,13 @@ test('A game can be resumed and the players will be notified', async () => {
 });
 
 async function player1WillBeCalled(playerName: string) {
-    const player1Input = screen.getByLabelText('Joueur 1');
+    const player1Input = screen.getByPlaceholderText('Nom du joueur 1');
     await userEvent.click(player1Input);
     await userEvent.type(player1Input, playerName);
 }
 
 async function player2WillBeCalled(playerName: string) {
-    const player2Input = screen.getByLabelText('Joueur 2');
+    const player2Input = screen.getByPlaceholderText('Nom du joueur 2');
     await userEvent.click(player2Input);
     await userEvent.type(player2Input, playerName);
 }
