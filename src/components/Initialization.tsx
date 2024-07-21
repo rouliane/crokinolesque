@@ -34,7 +34,7 @@ export default function Initialization({notifyFirstPlayer}: Props) {
                 Crokinole
             </Typography>
 
-            <img src={HeaderImage} width="100%" height="200px" alt='Header' style={{margin:"10px auto 15px auto", objectFit: "cover"}}/>
+            <img src={HeaderImage} width="100%" height="160px" alt='Header' style={{margin:"10px auto 15px auto", objectFit: "cover"}}/>
 
             <Typography variant="h5" align="center">Nouvelle partie</Typography>
 

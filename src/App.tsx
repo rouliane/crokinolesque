@@ -12,11 +12,7 @@ import Menu from '@mui/material/Menu';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import MenuIcon from '@mui/icons-material/Menu';
 import ReplayIcon from '@mui/icons-material/Replay';
-
-enum PaletteMode {
-    light = 'light',
-    dark = 'dark'
-}
+import {PaletteMode} from "./Palette";
 
 export default function App() {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -41,7 +37,7 @@ export default function App() {
                 mode: colorMode,
                 background: {
                     default: colorMode === PaletteMode.light ? '#F8FAFC' : '#111A22',
-                    paper: colorMode === PaletteMode.light ? '#F8FAFC' : '#111A22',
+                    paper: colorMode === PaletteMode.light ? '#F8FAFC' : '#1A2632',
                 },
                 // primary: {
                 //     main: '#1980E6',
@@ -50,10 +46,13 @@ export default function App() {
             typography: {
                 fontFamily: '"Manrope", sans-serif',
                 fontWeightLight: 300,
-                fontWeightRegular: 500,
-                fontWeightMedium: 600,
+                fontWeightRegular: 400,
+                fontWeightMedium: 500,
                 fontWeightBold: 700,
-            }
+            },
+            shape: {
+                borderRadius: 6,
+            },
         }),
         [colorMode],
     );
