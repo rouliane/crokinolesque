@@ -87,8 +87,8 @@ async function userScoresPoints(playerName: string, points: number) {
 }
 
 function gameScoreShouldNowBe(player1Score: number, player2Score: number) {
-    expect(screen.getByText(`Player 1 : ${player1Score}`)).toBeInTheDocument();
-    expect(screen.getByText(`Player 2 : ${player2Score}`)).toBeInTheDocument();
+    expect(screen.getByTestId('player1Score').textContent).toBe(player1Score.toString());
+    expect(screen.getByTestId('player2Score').textContent).toBe(player2Score.toString());
 }
 
 function displayedRoundHistoryShouldBe(expected: string[]) {

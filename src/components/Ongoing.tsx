@@ -5,16 +5,18 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import RoundsHistory from "./RoundsHistory";
-import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import {useGameContext} from "../contexts/gameContext";
 import Header from "./Header";
+import HistoryIcon from '@mui/icons-material/HistoryToggleOff';
+import IconButton from "@mui/material/IconButton";
+import HistoryModal from "../HistoryModal";
 
 export default function Ongoing() {
-    const {currentPlayer, player1Name, player2Name, rounds, endRoundWithADraw, endRoundWithAWinner, player1Score, player2Score} = useGameContext();
+    const {currentPlayer, player1Name, player2Name, endRoundWithADraw, endRoundWithAWinner, player1Score, player2Score} = useGameContext();
     const [roundPoints, setRoundPoints] = useState<null | number>(null);
     const [roundWinner, setRoundWinner] = useState<null|string>(null);
+    const [showHistory, setShowHistory] = useState(false);
 
     const isRoundScoreValid = roundPoints !== null && roundPoints > 0 && roundPoints <= 240 && roundPoints % 5 === 0;
 
@@ -51,22 +53,25 @@ export default function Ongoing() {
                     <Paper sx={{display: "flex", padding: "10px", backgroundColor: "#243647", backgroundImage: "none"}}>
                         <ArrowForwardIcon/>
                     </Paper>
-                    <div>
-                    <Typography fontWeight="500">Premier joueur</Typography>
-                    <Box fontSize="small" color="#93ADC9">{currentPlayer}</Box>
-                    </div>
+                    <Box flexGrow="1">
+                        <Typography fontWeight="500">Premier joueur</Typography>
+                        <Box fontSize="small" color="#93ADC9">{currentPlayer}</Box>
+                    </Box>
+                    <Box alignSelf="start">
+                        <IconButton onClick={() => setShowHistory(!showHistory)}><HistoryIcon/></IconButton>
+                    </Box>
                 </Box>
 
                 <Typography variant="h6" mt="16px">Score</Typography>
 
                 <Box display="flex" gap="10px" alignItems="stretch" mt="5px">
                     <Paper sx={{textAlign: "center", padding: "5px 10px 10px 10px", backgroundImage: "none", border: "1px #344D65 solid", width: "100%"}}>
-                        <div><Typography fontSize="xx-large" fontWeight="600" color={theme => theme.palette.primary.main}>{player1Score}</Typography></div>
+                        <div><Typography fontSize="xx-large" fontWeight="600" color={theme => theme.palette.primary.main} data-testid="player1Score">{player1Score}</Typography></div>
                         <Typography fontSize={theme => theme.typography.fontSize}>{player1Name}</Typography>
                     </Paper>
 
                     <Paper sx={{textAlign: "center", padding: "5px 10px 10px 10px", backgroundImage: "none", border: "1px #344D65 solid", width: "100%"}}>
-                        <div><Typography fontSize="xx-large" fontWeight="600" color={theme => theme.palette.primary.main}>{player2Score}</Typography></div>
+                        <div><Typography fontSize="xx-large" fontWeight="600" color={theme => theme.palette.primary.main} data-testid="player2Score">{player2Score}</Typography></div>
                         <Typography fontSize={theme => theme.typography.fontSize}>{player2Name}</Typography>
                     </Paper>
                 </Box>
@@ -104,14 +109,10 @@ export default function Ongoing() {
                     }
                 </Box>
 
-                {rounds.length > 0 &&
-                    <Box>
-                        <Typography variant="h6" mt={3}>Historique</Typography>
-                        <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-                            <RoundsHistory rounds={rounds} player1Name={player1Name} player2Name={player2Name} />
-                        </TableContainer>
-                    </Box>
-                }
+                <HistoryModal
+                    open={showHistory}
+                    close={() => setShowHistory(false)}
+                />
             </Container>
         </>
     );

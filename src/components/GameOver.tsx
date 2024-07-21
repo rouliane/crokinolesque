@@ -22,7 +22,7 @@ export default function GameOver() {
         <Container sx={{textAlign: "center"}}>
             <Header />
 
-            <Typography variant="h5" mb={5} color="success.main">
+            <Typography variant="h5" mb={4} color="success.main">
                 <Stack direction="row" alignItems="center" justifyContent="center" gap={1}>
                     <CelebrationIcon/>
                     {winnerName} a gagné {winnerScore} - {looserScore}
