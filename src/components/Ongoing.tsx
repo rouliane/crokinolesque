@@ -11,11 +11,14 @@ import HistoryModal from "./HistoryModal";
 import Header from "./Header";
 import {useGameContext} from "../contexts/gameContext";
 import RoundEndModal from "./RoundEndModal";
+import {useAppThemeContext} from "../contexts/AppThemeContext";
+import {PaletteMode} from "../Palette";
 
 export default function Ongoing() {
     const {currentPlayer, player1Name, player2Name, endRoundWithADraw, endRoundWithAWinner, player1Score, player2Score} = useGameContext();
     const [roundWinner, setRoundWinner] = useState<null|string>(null);
     const [showHistory, setShowHistory] = useState(false);
+    const {theme} = useAppThemeContext();
 
     const saveRound = (roundPoints: number) => {
         endRoundWithAWinner(roundWinner as string, roundPoints as number);
@@ -33,7 +36,7 @@ export default function Ongoing() {
             <Container>
 
                 <Box display="flex" gap="15px" alignItems="center">
-                    <Paper sx={{display: "flex", padding: "10px", backgroundColor: "#243647", backgroundImage: "none"}}>
+                    <Paper elevation={0} sx={{display: "flex", padding: "10px", backgroundColor: theme.palette.mode === PaletteMode.dark ? "#243647" : "grey.300"}} >
                         <ArrowForwardIcon/>
                     </Paper>
                     <Box flexGrow="1">
@@ -48,12 +51,18 @@ export default function Ongoing() {
                 <Typography variant="h6" mt="16px">Score</Typography>
 
                 <Box display="flex" gap="10px" alignItems="stretch" mt="5px">
-                    <Paper sx={{textAlign: "center", padding: "5px 10px 10px 10px", backgroundImage: "none", border: "1px #344D65 solid", width: "100%"}}>
+                    <Paper
+                        elevation={0}
+                        sx={{textAlign: "center", padding: "5px 10px 10px 10px", width: "100%", border: theme.palette.mode === PaletteMode.dark ? '1px #344D65 solid' : '1px #D0DBE7 solid'}}
+                    >
                         <div><Typography fontSize="xx-large" fontWeight="600" color={theme => theme.palette.primary.main} data-testid="player1Score">{player1Score}</Typography></div>
                         <Typography fontSize={theme => theme.typography.fontSize}>{player1Name}</Typography>
                     </Paper>
 
-                    <Paper sx={{textAlign: "center", padding: "5px 10px 10px 10px", backgroundImage: "none", border: "1px #344D65 solid", width: "100%"}}>
+                    <Paper
+                        elevation={0}
+                        sx={{textAlign: "center", padding: "5px 10px 10px 10px", width: "100%", border: theme.palette.mode === PaletteMode.dark ? '1px #344D65 solid' : '1px #D0DBE7 solid'}}
+                    >
                         <div><Typography fontSize="xx-large" fontWeight="600" color={theme => theme.palette.primary.main} data-testid="player2Score">{player2Score}</Typography></div>
                         <Typography fontSize={theme => theme.typography.fontSize}>{player2Name}</Typography>
                     </Paper>
