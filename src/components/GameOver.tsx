@@ -3,7 +3,6 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TableContainer from '@mui/material/TableContainer';
-import Paper from '@mui/material/Paper';
 import RoundsHistory from "./RoundsHistory";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import Stack from "@mui/material/Stack";
