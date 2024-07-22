@@ -1,6 +1,5 @@
 import Typography from "@mui/material/Typography";
 import TableContainer from "@mui/material/TableContainer";
-import Paper from "@mui/material/Paper";
 import RoundsHistory from "./components/RoundsHistory";
 import Box from "@mui/material/Box";
 import React from "react";
@@ -19,7 +18,6 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
     p: 2,
 };
@@ -32,7 +30,7 @@ const HistoryModal = (props: SimpleDialogProps) => {
         <Modal onClose={close} open={open}>
             <Box sx={style}>
                 <Typography variant="h6" textAlign="center">Historique</Typography>
-                <TableContainer component={Paper} sx={{ marginTop: 2 }}>
+                <TableContainer sx={{ marginTop: 2 }}>
                     <RoundsHistory rounds={rounds} player1Name={player1Name} player2Name={player2Name} />
                 </TableContainer>
             </Box>
