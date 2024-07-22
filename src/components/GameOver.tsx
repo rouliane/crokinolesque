@@ -32,7 +32,7 @@ export default function GameOver() {
 
             <Typography variant="h6" mt={5}>Historique</Typography>
 
-            <TableContainer component={Paper} sx={{marginTop: 2}}>
+            <TableContainer component={Paper} sx={{marginTop: 2, marginBottom: 2}}>
                 <RoundsHistory rounds={rounds} player1Name={player1Name} player2Name={player2Name}/>
             </TableContainer>
 

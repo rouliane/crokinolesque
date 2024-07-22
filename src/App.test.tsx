@@ -81,7 +81,7 @@ async function player2WillBeCalled(playerName: string) {
 async function userScoresPoints(playerName: string, points: number) {
     const playerButton = screen.getByRole('button', {name: playerName});
     await userEvent.click(playerButton);
-    const scoreInput = screen.getByLabelText('Points');
+    const scoreInput = screen.getByPlaceholderText('Points');
     await userEvent.click(scoreInput);
     await userEvent.type(scoreInput, points.toString());
     await userEvent.click(screen.getByRole('button', {name: 'Valider'}));
