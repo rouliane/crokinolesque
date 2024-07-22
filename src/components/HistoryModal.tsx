@@ -1,12 +1,12 @@
 import Typography from "@mui/material/Typography";
 import TableContainer from "@mui/material/TableContainer";
-import RoundsHistory from "./components/RoundsHistory";
+import RoundsHistory from "./RoundsHistory";
 import Box from "@mui/material/Box";
 import React from "react";
-import {useGameContext} from "./contexts/gameContext";
+import {useGameContext} from "../contexts/gameContext";
 import Modal from '@mui/material/Modal';
 
-export interface SimpleDialogProps {
+type Props = {
     open: boolean;
     close: () => void;
 }
@@ -22,9 +22,8 @@ const style = {
     p: 2,
 };
 
-const HistoryModal = (props: SimpleDialogProps) => {
+const HistoryModal = ({close, open}: Props) => {
     const {player1Name, player2Name, rounds} = useGameContext();
-    const { close, open } = props;
 
     return (
         <Modal onClose={close} open={open}>

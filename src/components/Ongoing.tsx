@@ -6,11 +6,11 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Paper from '@mui/material/Paper';
-import {useGameContext} from "../contexts/gameContext";
-import Header from "./Header";
 import HistoryIcon from '@mui/icons-material/HistoryToggleOff';
 import IconButton from "@mui/material/IconButton";
-import HistoryModal from "../HistoryModal";
+import HistoryModal from "./HistoryModal";
+import Header from "./Header";
+import {useGameContext} from "../contexts/gameContext";
 
 export default function Ongoing() {
     const {currentPlayer, player1Name, player2Name, endRoundWithADraw, endRoundWithAWinner, player1Score, player2Score} = useGameContext();
