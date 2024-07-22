@@ -8,7 +8,6 @@ import RoundsHistory from "./RoundsHistory";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import Stack from "@mui/material/Stack";
 import {useGameContext} from "../contexts/gameContext";
-import Header from "./Header";
 
 export default function GameOver() {
     const {rounds, player1Name, player2Name} = useGameContext();
@@ -19,23 +18,20 @@ export default function GameOver() {
     const looserScore = Math.min(lastRound.player1Score, lastRound.player2Score);
 
     return (
-        <>
-            <Header />
-            <Container sx={{textAlign: "center"}}>
-                <Typography variant="h5" mb={4} color="success.main">
-                    <Stack direction="row" alignItems="center" justifyContent="center" gap={1}>
-                        <CelebrationIcon/>
-                        {winnerName} a gagné {winnerScore} - {looserScore}
-                    </Stack>
-                </Typography>
-                <Button variant="contained" size="large" onClick={() => window.location.reload()}>Rejouer</Button>
+        <Container sx={{textAlign: "center"}}>
+            <Typography variant="h5" mb={4} color="success.main">
+                <Stack direction="row" alignItems="center" justifyContent="center" gap={1}>
+                    <CelebrationIcon/>
+                    {winnerName} a gagné {winnerScore} - {looserScore}
+                </Stack>
+            </Typography>
+            <Button variant="contained" size="large" onClick={() => window.location.reload()}>Rejouer</Button>
 
-                <Typography variant="h6" mt={5}>Historique</Typography>
+            <Typography variant="h6" mt={5}>Historique</Typography>
 
-                <TableContainer component={Paper} sx={{marginTop: 2, marginBottom: 2}}>
-                    <RoundsHistory rounds={rounds} player1Name={player1Name} player2Name={player2Name}/>
-                </TableContainer>
-            </Container>
-        </>
+            <TableContainer component={Paper} sx={{marginTop: 2, marginBottom: 2}}>
+                <RoundsHistory rounds={rounds} player1Name={player1Name} player2Name={player2Name}/>
+            </TableContainer>
+        </Container>
     );
 }

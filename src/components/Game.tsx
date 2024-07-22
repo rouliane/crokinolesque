@@ -7,6 +7,7 @@ import {GamePhase} from "../hooks/useGame";
 import {useGameContext} from "../contexts/gameContext";
 import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
+import Header from "./Header";
 
 /**
  * game rules :
@@ -46,6 +47,8 @@ export default function Game() {
 
     return (
         <Container disableGutters>
+            <Header />
+
             {phase === GamePhase.Initialization && <Initialization notifyFirstPlayer={notifyFirstPlayer} />}
             {phase === GamePhase.Ongoing && <Ongoing />}
             {phase === GamePhase.GameOver && <GameOver />}

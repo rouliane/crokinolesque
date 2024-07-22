@@ -6,7 +6,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Box from '@mui/material/Box';
 import {useGameContext} from "../contexts/gameContext";
 import Typography from "@mui/material/Typography";
-import Header from "./Header";
 
 type Props = {
     notifyFirstPlayer: () => void;
@@ -30,8 +29,6 @@ export default function Initialization({notifyFirstPlayer}: Props) {
 
     return (
         <>
-            <Header/>
-
             <Typography variant="h5" align="center">Nouvelle partie</Typography>
 
             <Box display="flex" flexDirection="column" ml={3} mt={2} mr={3} gap={3}>
