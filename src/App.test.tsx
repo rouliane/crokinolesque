@@ -2,18 +2,19 @@ import {render, screen} from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import App from "./App";
 import {GamePhase} from "./hooks/useGame";
+import {AppThemeProvider} from "./contexts/AppThemeContext";
 
 beforeEach(() => {
     localStorage.clear();
 });
 
 test('the app is rendered', () => {
-    render(<App />);
+    render(<AppThemeProvider><App /></AppThemeProvider>);
     expect(screen.getByText('Crokinole')).toBeInTheDocument();
 });
 
 test('happy path', async () => {
-    render(<App />);
+    render(<AppThemeProvider><App /></AppThemeProvider>);
 
     await player1WillBeCalled('Player 1');
     await player2WillBeCalled('Player 2');
@@ -58,7 +59,7 @@ test('A game can be resumed and the players will be notified', async () => {
         ],
     }));
 
-    render(<App />);
+    render(<AppThemeProvider><App /></AppThemeProvider>);
 
     gameScoreShouldNowBe(50, 20);
 
