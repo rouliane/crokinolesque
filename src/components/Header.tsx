@@ -31,7 +31,7 @@ export default function Header() {
 
     return (
         <>
-            <Box display="flex" alignItems="center" gap="5px" height="45px">
+            <Box display="flex" alignItems="center" gap="5px">
                 <IconButton sx={{marginTop: "2px"}} onClick={handleClick} size="small">
                     <MenuIcon fontSize="large"/>
                 </IconButton>
@@ -63,8 +63,8 @@ export default function Header() {
             <img
                 src={HeaderImage}
                 width="100%"
-                height="160px"
-                style={{margin: "10px auto 16px auto", objectFit: "cover"}}
+                height="170px"
+                style={{margin: "2px auto 16px auto", objectFit: "cover"}}
                 alt='Header'
             />
         </>

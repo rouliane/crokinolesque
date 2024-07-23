@@ -58,6 +58,7 @@ export default function Game() {
                 autoHideDuration={5000}
                 onClose={handleCloseFirstPlayerAlert}
                 message={`Le premier joueur sera ${currentPlayer}`}
+                anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
             />
 
             <Snackbar
@@ -66,6 +67,7 @@ export default function Game() {
                 onClose={() => setIsResumingGame(false)}
                 message="Une partie non terminée a été chargée"
                 action={<Button onClick={restartGame} color="secondary" size="small">Recommencer</Button>}
+                anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
             />
         </Container>
     );

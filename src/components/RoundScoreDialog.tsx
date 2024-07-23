@@ -12,7 +12,7 @@ type Props = {
     saveWinnerScore: (score: number) => void;
 }
 
-const RoundEndModal = ({close, roundWinner, saveWinnerScore}: Props) => {
+const RoundScoreDialog = ({close, roundWinner, saveWinnerScore}: Props) => {
     const [roundPoints, setRoundPoints] = useState<null | number>(null);
 
     const isRoundScoreValid = roundPoints !== null && roundPoints > 0 && roundPoints <= 240 && roundPoints % 5 === 0;
@@ -70,4 +70,4 @@ const RoundEndModal = ({close, roundWinner, saveWinnerScore}: Props) => {
     );
 }
 
-export default RoundEndModal;
+export default RoundScoreDialog;

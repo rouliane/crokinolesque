@@ -9,7 +9,7 @@ import HistoryIcon from '@mui/icons-material/HistoryToggleOff';
 import IconButton from "@mui/material/IconButton";
 import HistoryModal from "./HistoryModal";
 import {useGameContext} from "../contexts/gameContext";
-import RoundEndModal from "./RoundEndModal";
+import RoundScoreDialog from "./RoundScoreDialog";
 import {useAppThemeContext} from "../contexts/AppThemeContext";
 import {PaletteMode} from "../Palette";
 
@@ -38,14 +38,14 @@ export default function Ongoing() {
                 </Paper>
                 <Box flexGrow="1">
                     <Typography fontWeight="500">Premier joueur</Typography>
-                    <Box fontSize="small" color="#93ADC9">{currentPlayer}</Box>
+                    <Box fontSize={theme => theme.typography.fontSize} color={theme => theme.palette.grey[theme.palette.mode === PaletteMode.dark ? 500 : 600]}>{currentPlayer}</Box>
                 </Box>
                 <Box alignSelf="start">
                     <IconButton onClick={() => setShowHistory(!showHistory)}><HistoryIcon/></IconButton>
                 </Box>
             </Box>
 
-            <Typography variant="h6" mt="16px">Score</Typography>
+            <Typography variant="h6" mt={3}>Score</Typography>
 
             <Box display="flex" gap="10px" alignItems="stretch" mt="5px">
                 <Paper
@@ -65,18 +65,18 @@ export default function Ongoing() {
                 </Paper>
             </Box>
 
-            <Box mt={2}>
+            <Box mt={3}>
                 <Typography variant="h6">Qui a gagné cette manche ?</Typography>
 
                 <Box display="flex" justifyContent="space-between" mt={1}>
-                    <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player1Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player1Name)}>{player1Name}</Button>
-                    <Button variant="contained" color={roundWinner === null ? 'primary' : roundWinner === player2Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player2Name)}>{player2Name}</Button>
-                    <Button variant="contained" color="inherit" onClick={draw}>Egalité</Button>
+                    <Button variant="contained" size="large" color={roundWinner === null ? 'primary' : roundWinner === player1Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player1Name)}>{player1Name}</Button>
+                    <Button variant="contained" size="large" color={roundWinner === null ? 'primary' : roundWinner === player2Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player2Name)}>{player2Name}</Button>
+                    <Button variant="contained" size="large" color="inherit" onClick={draw}>Egalité</Button>
                 </Box>
             </Box>
 
             {roundWinner !== null &&
-                <RoundEndModal
+                <RoundScoreDialog
                     close={() => setRoundWinner(null)} roundWinner={roundWinner || ''}
                     saveWinnerScore={saveRound}
                 />
