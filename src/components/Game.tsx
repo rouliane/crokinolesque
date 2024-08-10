@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from '@mui/material/Container';
 import Initialization from './Initialization';
 import GameOver from './GameOver';
@@ -8,26 +8,33 @@ import {useGameContext} from "../contexts/gameContext";
 import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import Header from "./Header";
-
-/**
- * game rules :
- * Crokinole is a board game that is played on a circular board with a hole in the middle.
- * 1. The game is played by 2 players
- * 2. The players take turns to play
- * 3. Each round players play all their discs and we calculate the points at the end of the round
- * 4. Each player can mark from 0 to 240 points (12*20) in each round
- * 5. The player who reaches 100 points first wins the game
- * 6. When the game is over, the user will be able to restart the game.
- *
- * the user interface will be in french
- *
- * The game state will be stored in local storage. If the page is reload, the game will continue where it was left if there was a game in progress.
- * When the game is over, the state will be reset in the local storage.
- */
+import {requestWakeLock} from '../wakeLock';
 
 export default function Game() {
     const {phase, currentPlayer, isResumingGame, setIsResumingGame} = useGameContext();
     const [showFirstPlayerAlert, setFirstPlayerAlert] = useState(false);
+    const [wakeLock, setWakeLock] = useState<any>(null);
+
+    useEffect(() => {
+        let wakeLockInstance: any = null;
+
+        if (phase === GamePhase.Ongoing) {
+            requestWakeLock().then(lock => {
+                wakeLockInstance = lock;
+                setWakeLock(lock);
+            });
+        } else if (phase === GamePhase.GameOver && wakeLock) {
+            wakeLock.release();
+            setWakeLock(null);
+        }
+
+        return () => {
+            if (wakeLockInstance) {
+                wakeLockInstance.release();
+            }
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [phase]);
 
     const handleCloseFirstPlayerAlert = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
