@@ -7,6 +7,7 @@ import RoundsHistory from "./RoundsHistory";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import Stack from "@mui/material/Stack";
 import {useGameContext} from "../contexts/gameContext";
+import Box from "@mui/material/Box";
 
 export default function GameOver() {
     const {rounds, player1Name, player2Name} = useGameContext();
@@ -16,6 +17,56 @@ export default function GameOver() {
     const winnerScore = Math.max(lastRound.player1Score, lastRound.player2Score);
     const looserScore = Math.min(lastRound.player1Score, lastRound.player2Score);
 
+    function createAsciiTable(data: any) {
+        const headers = Object.keys(data[0]);
+
+        const columnWidths = headers.map((header) =>
+            Math.max(
+                ...data.map((row: any) => row[header].toString().length),
+                header.length,
+            ),
+        );
+
+        const divider =
+            "+" +
+            headers.map((_, i) => "-".repeat(columnWidths[i] + 2)).join("+") +
+            "+";
+
+        const rows = data.map(
+            (row: any) =>
+                "|" +
+                headers
+                    .map(
+                        (header, i) => ` ${row[header].toString().padEnd(columnWidths[i])} `,
+                    )
+                    .join("|") +
+                "|",
+        );
+
+        return [divider, ...rows, divider].join("\n");
+    }
+
+    const copyGameHistoryToClipboard = () => {
+        const table = [["Manche", player1Name, player2Name]];
+        rounds.forEach((round, index) => {
+            // @ts-ignore
+            table.push([index + 1, round.player1Score, round.player2Score]);
+        });
+
+        const asciiTable = createAsciiTable(table);
+
+        const type = "text/html";
+        const blobText = new Blob([asciiTable], { type: "text/plain" });
+        const blobHtml = new Blob([`:tada: ${winnerName} a gagné ${winnerScore} - ${looserScore} au crokinole\n<pre>${asciiTable}</pre>`], { type });
+        const data = [
+            new ClipboardItem({
+                "text/plain": blobText,
+                [type]: blobHtml
+            })
+        ];
+        navigator.clipboard.write(data);
+    }
+
     return (
         <Container sx={{textAlign: "center"}}>
             <Typography variant="h5" mb={4} color="success.main">
@@ -24,7 +75,11 @@ export default function GameOver() {
                     {winnerName} a gagné {winnerScore} - {looserScore}
                 </Stack>
             </Typography>
-            <Button variant="contained" size="large" onClick={() => window.location.reload()}>Rejouer</Button>
+
+            <Box display="flex" gap="10px" justifyContent="center">
+                <Button variant="contained" size="large" onClick={() => window.location.reload()}>Rejouer</Button>
+                <Button variant="text" size="large" onClick={copyGameHistoryToClipboard}>Partager</Button>
+            </Box>
 
             <Typography variant="h6" mt={5}>Historique</Typography>
 
