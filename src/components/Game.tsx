@@ -93,7 +93,7 @@ export default function Game() {
                 open={showNextFirstPlayerAlert}
                 autoHideDuration={5000}
                 onClose={handleCloseNextFirstPlayerAlert}
-                message={`Le premier joueur de ce roud sera ${currentPlayer}`}
+                message={`Le premier joueur de ce round sera ${currentPlayer}`}
                 anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
             />
         </Container>
