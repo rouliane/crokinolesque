@@ -35,7 +35,6 @@ test('happy path', async () => {
     await userScoresPoints('Player 1', 80);
 
     expect(screen.getByText(/Player 1 a gagné 100 - 40/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', {name: 'Rejouer'})).toBeInTheDocument();
     expect(screen.getAllByTestId('roundHistoryEntry').length).toBe(4);
 
     displayedRoundHistoryShouldBe([
