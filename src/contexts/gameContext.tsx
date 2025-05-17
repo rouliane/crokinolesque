@@ -5,10 +5,8 @@ interface GameContextType {
     phase: GamePhase;
     player1Name: string;
     player2Name: string;
-    setPlayer1Name: (name: string) => void;
-    setPlayer2Name: (name: string) => void;
     rounds: Round[];
-    launchGame: () => void;
+    launchGame: (player1Name: string, player2Name: string) => void;
     endRoundWithAWinner: (winner: string, points: number) => number;
     endRoundWithADraw: () => void;
     currentPlayer: string;
@@ -16,6 +14,7 @@ interface GameContextType {
     player2Score: number;
     isResumingGame: boolean;
     setIsResumingGame: (isResumingGame: boolean) => void;
+    launchNewGameWithSamePlayers: () => void;
 }
 
 const GameContext = createContext<GameContextType>({
@@ -23,9 +22,7 @@ const GameContext = createContext<GameContextType>({
     player1Name: '',
     player2Name: '',
     rounds: [],
-    setPlayer1Name: () => {},
-    setPlayer2Name: () => {},
-    launchGame: () => {},
+    launchGame: (player1Name: string, player2Name: string) => {},
     endRoundWithAWinner: () => 0,
     endRoundWithADraw: () => {},
     currentPlayer: '',
@@ -33,6 +30,7 @@ const GameContext = createContext<GameContextType>({
     player2Score: 0,
     isResumingGame: false,
     setIsResumingGame: () => {},
+    launchNewGameWithSamePlayers: () => {},
 });
 
 const GameProvider = ({ children }: {children: any}) => {

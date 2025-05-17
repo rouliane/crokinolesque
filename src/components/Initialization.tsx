@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import PersonIcon from '@mui/icons-material/Person';
@@ -12,12 +12,14 @@ type Props = {
 }
 
 export default function Initialization({notifyFirstPlayer}: Props) {
-    const {player1Name, player2Name, setPlayer1Name, setPlayer2Name, launchGame} = useGameContext();
+    const [player1Name, setPlayer1Name] = useState('');
+    const [player2Name, setPlayer2Name] = useState('');
+    const {launchGame} = useGameContext();
 
     const playerNamesAreValid = player1Name.trim() !== '' && player2Name.trim() !== '';
 
     const startGame = () => {
-        launchGame();
+        launchGame(player1Name, player2Name);
         notifyFirstPlayer();
     }
 

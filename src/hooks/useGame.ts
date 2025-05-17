@@ -40,16 +40,26 @@ const useGame = () => {
         }
     }, []);
 
-    const persistGameState = (phase: GamePhase, currentPlayer: string, rounds: Round[]) => {
+    const persistGameState = (phase: GamePhase, player1Name: string, player2Name: string, currentPlayer: string, rounds: Round[]) => {
         const gameState = {phase, player1Name, player2Name, currentPlayer, rounds};
         localStorage.setItem('gameState', JSON.stringify(gameState));
     }
 
-    const launchGame = () => {
+    const launchGame = (player1Name: string, player2Name: string) => {
+        setPlayer1Name(player1Name);
+        setPlayer2Name(player2Name);
         const currentPlayer = Math.random() < 0.5 ? player1Name : player2Name;
         setCurrentPlayer(currentPlayer);
         setPhase(GamePhase.Ongoing);
-        persistGameState(GamePhase.Ongoing, currentPlayer, []);
+        persistGameState(GamePhase.Ongoing, player1Name, player2Name,  currentPlayer, []);
+    }
+
+    const launchNewGameWithSamePlayers = () => {
+        setRounds([]);
+        setPhase(GamePhase.Ongoing);
+        const currentPlayer = Math.random() < 0.5 ? player1Name : player2Name;
+        setCurrentPlayer(currentPlayer);
+        persistGameState(GamePhase.Ongoing, player1Name, player2Name, currentPlayer, []);
     }
 
     const endRoundWithAWinner = (winner: string, points: number) => {
@@ -69,7 +79,7 @@ const useGame = () => {
         setRounds(newRounds);
         const currentPlayer = togglePlayer();
 
-        persistGameState(phase, currentPlayer, newRounds);
+        persistGameState(phase, player1Name, player2Name, currentPlayer, newRounds);
 
         if (player1NewScore >= 100 || player2NewScore >= 100) {
             finishGame();
@@ -89,7 +99,7 @@ const useGame = () => {
 
         const currentPlayer = togglePlayer();
 
-        persistGameState(phase, currentPlayer, newRounds);
+        persistGameState(phase, player1Name, player2Name, currentPlayer, newRounds);
     }
 
     const getLastRound = useCallback((): null | Round => rounds.length > 0 ? rounds[rounds.length - 1] : null, [rounds]);
@@ -113,8 +123,6 @@ const useGame = () => {
         phase,
         player1Name,
         player2Name,
-        setPlayer1Name,
-        setPlayer2Name,
         rounds,
         launchGame,
         endRoundWithAWinner,
@@ -124,6 +132,7 @@ const useGame = () => {
         player2Score,
         isResumingGame,
         setIsResumingGame,
+        launchNewGameWithSamePlayers,
     }
 }
 

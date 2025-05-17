@@ -7,9 +7,10 @@ import RoundsHistory from "./RoundsHistory";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import Stack from "@mui/material/Stack";
 import {useGameContext} from "../contexts/gameContext";
+import Box from "@mui/material/Box";
 
 export default function GameOver() {
-    const {rounds, player1Name, player2Name} = useGameContext();
+    const {rounds, player1Name, player2Name, launchNewGameWithSamePlayers} = useGameContext();
 
     const lastRound = rounds[rounds.length - 1];
     const winnerName = lastRound.player1Score > lastRound.player2Score ? player1Name : player2Name;
@@ -25,7 +26,10 @@ export default function GameOver() {
                 </Stack>
             </Typography>
 
-            <Button variant="contained" size="large" onClick={() => window.location.reload()}>Rejouer</Button>
+            <Box display="flex" flexDirection="column" alignItems="center" gap={3}>
+                <Button variant="contained" size="large" onClick={() => launchNewGameWithSamePlayers()}>Nouvelle partie (mêmes joueurs)</Button>
+                <Button variant="contained" size="large" onClick={() => window.location.reload()}>Nouvelle partie (nouveaux joueurs)</Button>
+            </Box>
 
             <Typography variant="h6" mt={5}>Historique</Typography>
 
