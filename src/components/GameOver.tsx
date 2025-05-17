@@ -9,13 +9,22 @@ import Stack from "@mui/material/Stack";
 import {useGameContext} from "../contexts/gameContext";
 import Box from "@mui/material/Box";
 
-export default function GameOver() {
+type Props = {
+    notifyFirstPlayer: () => void;
+}
+
+export default function GameOver({notifyFirstPlayer}: Props) {
     const {rounds, player1Name, player2Name, launchNewGameWithSamePlayers} = useGameContext();
 
     const lastRound = rounds[rounds.length - 1];
     const winnerName = lastRound.player1Score > lastRound.player2Score ? player1Name : player2Name;
     const winnerScore = Math.max(lastRound.player1Score, lastRound.player2Score);
     const looserScore = Math.min(lastRound.player1Score, lastRound.player2Score);
+
+    const launchANewGameWithTheSamePlayers = () => {
+        launchNewGameWithSamePlayers();
+        notifyFirstPlayer();
+    }
 
     return (
         <Container sx={{textAlign: "center"}}>
@@ -27,7 +36,7 @@ export default function GameOver() {
             </Typography>
 
             <Box display="flex" flexDirection="column" alignItems="center" gap={3}>
-                <Button variant="contained" size="large" onClick={() => launchNewGameWithSamePlayers()}>Nouvelle partie (mêmes joueurs)</Button>
+                <Button variant="contained" size="large" onClick={() => launchANewGameWithTheSamePlayers()}>Nouvelle partie (mêmes joueurs)</Button>
                 <Button variant="contained" size="large" onClick={() => window.location.reload()}>Nouvelle partie (nouveaux joueurs)</Button>
             </Box>
 

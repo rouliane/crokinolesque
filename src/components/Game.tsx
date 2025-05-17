@@ -70,7 +70,7 @@ export default function Game() {
 
             {phase === GamePhase.Initialization && <Initialization notifyFirstPlayer={notifyFirstPlayer} />}
             {phase === GamePhase.Ongoing && <Ongoing notifyNextFirstPlayer={notifyNextFirstPlayer} />}
-            {phase === GamePhase.GameOver && <GameOver />}
+            {phase === GamePhase.GameOver && <GameOver notifyFirstPlayer={notifyFirstPlayer} />}
 
             <Snackbar
                 open={showFirstPlayerAlert}
