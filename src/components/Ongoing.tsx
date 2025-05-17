@@ -62,7 +62,7 @@ export default function Ongoing({notifyNextFirstPlayer}: Props) {
                     elevation={0}
                     sx={{textAlign: "center", padding: "5px 10px 10px 10px", width: "100%", border: theme.palette.mode === PaletteMode.dark ? '1px #344D65 solid' : '1px #D0DBE7 solid'}}
                 >
-                    <div><Typography fontSize="xx-large" fontWeight="600" color={theme => theme.palette.primary.main} data-testid="player1Score">{player1Score}</Typography></div>
+                    <div><Typography fontSize="xx-large" fontWeight="600" sx={{color: theme.palette.primary.main}} data-testid="player1Score">{player1Score}</Typography></div>
                     <Typography fontSize={theme => theme.typography.fontSize}>{player1Name}</Typography>
                 </Paper>
 
@@ -70,7 +70,7 @@ export default function Ongoing({notifyNextFirstPlayer}: Props) {
                     elevation={0}
                     sx={{textAlign: "center", padding: "5px 10px 10px 10px", width: "100%", border: theme.palette.mode === PaletteMode.dark ? '1px #344D65 solid' : '1px #D0DBE7 solid'}}
                 >
-                    <div><Typography fontSize="xx-large" fontWeight="600" color={theme => theme.palette.primary.main} data-testid="player2Score">{player2Score}</Typography></div>
+                    <div><Typography fontSize="xx-large" fontWeight="600" sx={{color: theme.palette.primary.main}} data-testid="player2Score">{player2Score}</Typography></div>
                     <Typography fontSize={theme => theme.typography.fontSize}>{player2Name}</Typography>
                 </Paper>
             </Box>
