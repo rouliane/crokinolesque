@@ -23,7 +23,7 @@ export default function Initialization({notifyFirstPlayer}: Props) {
     const [player4Name, setPlayer4Name] = useState('');
     const {launchGame} = useGameContext();
 
-    const playerNames = [player1Name, player2Name, player3Name, player4Name].slice(0, playersNumber);
+    const playerNames = [player1Name, player2Name, player3Name, player4Name].slice(0, playersNumber).map(playerName => playerName.trim());
     const playerNamesAreValid = playerNames.every(name => name.trim() !== '');
 
     const startGame = () => {
