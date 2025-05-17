@@ -40,7 +40,7 @@ const useGame = () => {
         }
     }, []);
 
-    const saveGameState = (phase: GamePhase, currentPlayer: string, rounds: Round[]) => {
+    const persistGameState = (phase: GamePhase, currentPlayer: string, rounds: Round[]) => {
         const gameState = {phase, player1Name, player2Name, currentPlayer, rounds};
         localStorage.setItem('gameState', JSON.stringify(gameState));
     }
@@ -49,7 +49,7 @@ const useGame = () => {
         const currentPlayer = Math.random() < 0.5 ? player1Name : player2Name;
         setCurrentPlayer(currentPlayer);
         setPhase(GamePhase.Ongoing);
-        saveGameState(GamePhase.Ongoing, currentPlayer, []);
+        persistGameState(GamePhase.Ongoing, currentPlayer, []);
     }
 
     const endRoundWithAWinner = (winner: string, points: number) => {
@@ -69,11 +69,13 @@ const useGame = () => {
         setRounds(newRounds);
         const currentPlayer = togglePlayer();
 
-        saveGameState(phase, currentPlayer, newRounds);
+        persistGameState(phase, currentPlayer, newRounds);
 
         if (player1NewScore >= 100 || player2NewScore >= 100) {
             finishGame();
         }
+
+        return winner === player1Name ? player1NewScore : player2NewScore;
     }
 
     const endRoundWithADraw = () => {
@@ -87,7 +89,7 @@ const useGame = () => {
 
         const currentPlayer = togglePlayer();
 
-        saveGameState(phase, currentPlayer, newRounds);
+        persistGameState(phase, currentPlayer, newRounds);
     }
 
     const getLastRound = useCallback((): null | Round => rounds.length > 0 ? rounds[rounds.length - 1] : null, [rounds]);

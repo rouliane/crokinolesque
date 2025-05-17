@@ -9,7 +9,7 @@ interface GameContextType {
     setPlayer2Name: (name: string) => void;
     rounds: Round[];
     launchGame: () => void;
-    endRoundWithAWinner: (winner: string, points: number) => void;
+    endRoundWithAWinner: (winner: string, points: number) => number;
     endRoundWithADraw: () => void;
     currentPlayer: string;
     player1Score: number;
@@ -26,7 +26,7 @@ const GameContext = createContext<GameContextType>({
     setPlayer1Name: () => {},
     setPlayer2Name: () => {},
     launchGame: () => {},
-    endRoundWithAWinner: () => {},
+    endRoundWithAWinner: () => 0,
     endRoundWithADraw: () => {},
     currentPlayer: '',
     player1Score: 0,

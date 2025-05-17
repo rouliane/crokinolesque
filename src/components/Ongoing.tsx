@@ -13,20 +13,26 @@ import RoundScoreDialog from "./RoundScoreDialog";
 import {useAppThemeContext} from "../contexts/AppThemeContext";
 import {PaletteMode} from "../Palette";
 
-export default function Ongoing() {
+type Props = {
+    notifyNextFirstPlayer: () => void;
+}
+
+export default function Ongoing({notifyNextFirstPlayer}: Props) {
     const {currentPlayer, player1Name, player2Name, endRoundWithADraw, endRoundWithAWinner, player1Score, player2Score} = useGameContext();
     const [roundWinner, setRoundWinner] = useState<null|string>(null);
     const [showHistory, setShowHistory] = useState(false);
     const {theme} = useAppThemeContext();
 
     const saveRound = (roundPoints: number) => {
-        endRoundWithAWinner(roundWinner as string, roundPoints as number);
+        const winnerScore = endRoundWithAWinner(roundWinner as string, roundPoints as number);
         setRoundWinner(null);
+        winnerScore < 100 && notifyNextFirstPlayer();
     }
 
     const draw = () => {
         endRoundWithADraw();
         setRoundWinner(null);
+        notifyNextFirstPlayer();
     }
 
     return (
@@ -36,16 +42,20 @@ export default function Ongoing() {
                 <Paper elevation={0} sx={{display: "flex", padding: "10px", backgroundColor: theme.palette.mode === PaletteMode.dark ? "#243647" : "grey.300"}} >
                     <ArrowForwardIcon/>
                 </Paper>
-                <Box flexGrow="1">
+                <Box>
                     <Typography fontWeight="500">Premier joueur</Typography>
                     <Box fontSize={theme => theme.typography.fontSize} color={theme => theme.palette.grey[theme.palette.mode === PaletteMode.dark ? 500 : 600]}>{currentPlayer}</Box>
                 </Box>
-                <Box alignSelf="start">
-                    <IconButton onClick={() => setShowHistory(!showHistory)}><HistoryIcon/></IconButton>
-                </Box>
             </Box>
 
-            <Typography variant="h6" mt={3}>Score</Typography>
+            <Box display="flex" alignItems="center" justifyContent="space-between" mt={2}>
+                <Typography variant="h6">Score</Typography>
+                <Box alignSelf="start">
+                    <IconButton onClick={() => setShowHistory(!showHistory)} sx={{paddingRight: "0px"}}>
+                        <HistoryIcon/>
+                    </IconButton>
+                </Box>
+            </Box>
 
             <Box display="flex" gap="10px" alignItems="stretch" mt="5px">
                 <Paper
@@ -71,13 +81,14 @@ export default function Ongoing() {
                 <Box display="flex" justifyContent="space-between" mt={1}>
                     <Button variant="contained" size="large" color={roundWinner === null ? 'primary' : roundWinner === player1Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player1Name)}>{player1Name}</Button>
                     <Button variant="contained" size="large" color={roundWinner === null ? 'primary' : roundWinner === player2Name ? 'success' : 'inherit'} onClick={() => setRoundWinner(player2Name)}>{player2Name}</Button>
-                    <Button variant="contained" size="large" color="inherit" onClick={draw}>Egalité</Button>
+                    <Button variant="outlined" size="large" color="inherit" onClick={draw}>Egalité</Button>
                 </Box>
             </Box>
 
             {roundWinner !== null &&
                 <RoundScoreDialog
-                    close={() => setRoundWinner(null)} roundWinner={roundWinner || ''}
+                    close={() => setRoundWinner(null)}
+                    roundWinner={roundWinner || ''}
                     saveWinnerScore={saveRound}
                 />
             }

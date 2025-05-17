@@ -13,6 +13,7 @@ import {requestWakeLock} from '../wakeLock';
 export default function Game() {
     const {phase, currentPlayer, isResumingGame, setIsResumingGame} = useGameContext();
     const [showFirstPlayerAlert, setFirstPlayerAlert] = useState(false);
+    const [showNextFirstPlayerAlert, setNextFirstPlayerAlert] = useState(false);
     const [wakeLock, setWakeLock] = useState<any>(null);
 
     useEffect(() => {
@@ -47,6 +48,17 @@ export default function Game() {
         setFirstPlayerAlert(true);
     }
 
+    const notifyNextFirstPlayer = () => {
+        setNextFirstPlayerAlert(true);
+    }
+
+    const handleCloseNextFirstPlayerAlert = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setNextFirstPlayerAlert(false);
+    }
+
     const restartGame = () => {
         localStorage.removeItem('gameState');
         window.location.reload()
@@ -57,7 +69,7 @@ export default function Game() {
             <Header />
 
             {phase === GamePhase.Initialization && <Initialization notifyFirstPlayer={notifyFirstPlayer} />}
-            {phase === GamePhase.Ongoing && <Ongoing />}
+            {phase === GamePhase.Ongoing && <Ongoing notifyNextFirstPlayer={notifyNextFirstPlayer} />}
             {phase === GamePhase.GameOver && <GameOver />}
 
             <Snackbar
@@ -74,6 +86,14 @@ export default function Game() {
                 onClose={() => setIsResumingGame(false)}
                 message="Une partie non terminée a été chargée"
                 action={<Button onClick={restartGame} color="secondary" size="small">Recommencer</Button>}
+                anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+            />
+
+            <Snackbar
+                open={showNextFirstPlayerAlert}
+                autoHideDuration={5000}
+                onClose={handleCloseNextFirstPlayerAlert}
+                message={`Le premier joueur de ce roud sera ${currentPlayer}`}
                 anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
             />
         </Container>
