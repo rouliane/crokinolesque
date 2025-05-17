@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 enum GamePhase {
     Initialization,
@@ -6,16 +6,23 @@ enum GamePhase {
     GameOver
 }
 
+type Player = {
+    name: string;
+    score: number;
+}
+
+type Players = {[playerName: string]: Player};
+
+type RoundScores = {[playerName: string]: number};
+
 type Round = {
-    player1Score: number;
-    player2Score: number;
+    scores: RoundScores;
     winner: string | null;
 }
 
 type GameState = {
     phase: GamePhase;
-    player1Name: string;
-    player2Name: string;
+    players: Players;
     currentPlayer: string;
     rounds: Round[];
 }
@@ -23,9 +30,8 @@ type GameState = {
 const useGame = () => {
     const [isResumingGame, setIsResumingGame] = useState(false);
     const [phase, setPhase] = useState(GamePhase.Initialization);
-    const [player1Name, setPlayer1Name] = useState('');
-    const [player2Name, setPlayer2Name] = useState('');
-    const [currentPlayer, setCurrentPlayer] = useState(player1Name);
+    const [players, setPlayers] = useState<Players>({});
+    const [currentPlayer, setCurrentPlayer] = useState('');
     const [rounds, setRounds] = useState<Round[]>([]);
 
     useEffect(() => {
@@ -33,73 +39,118 @@ const useGame = () => {
         if (previousGameState.phase === GamePhase.Ongoing) {
             setIsResumingGame(true);
             setPhase(GamePhase.Ongoing);
-            setPlayer1Name(previousGameState.player1Name);
-            setPlayer2Name(previousGameState.player2Name);
+            setPlayers(previousGameState.players);
             setCurrentPlayer(previousGameState.currentPlayer);
             setRounds(previousGameState.rounds);
         }
     }, []);
 
-    const persistGameState = (phase: GamePhase, player1Name: string, player2Name: string, currentPlayer: string, rounds: Round[]) => {
-        const gameState = {phase, player1Name, player2Name, currentPlayer, rounds};
+    const persistGameState = (phase: GamePhase, players: Players, currentPlayer: string, rounds: Round[]) => {
+        const gameState = {phase, players, currentPlayer, rounds};
         localStorage.setItem('gameState', JSON.stringify(gameState));
     }
 
-    const launchGame = (player1Name: string, player2Name: string) => {
-        setPlayer1Name(player1Name);
-        setPlayer2Name(player2Name);
-        const currentPlayer = Math.random() < 0.5 ? player1Name : player2Name;
+    const launchGame = (playerNames: string[]) => {
+        const players = playerNames.reduce((acc, playerName) => {
+            acc[playerName] = { name: playerName, score: 0 };
+            return acc;
+        }, {} as Players);
+        setPlayers(players);
+        const currentPlayer = playerNames[Math.floor(Math.random() * playerNames.length)];
         setCurrentPlayer(currentPlayer);
         setPhase(GamePhase.Ongoing);
-        persistGameState(GamePhase.Ongoing, player1Name, player2Name,  currentPlayer, []);
+        persistGameState(GamePhase.Ongoing, players, currentPlayer, []);
     }
 
     const launchNewGameWithSamePlayers = () => {
         setRounds([]);
         setPhase(GamePhase.Ongoing);
-        const currentPlayer = Math.random() < 0.5 ? player1Name : player2Name;
+        const currentPlayer = Object.keys(players)[Math.floor(Math.random() * Object.keys(players).length)];
         setCurrentPlayer(currentPlayer);
-        persistGameState(GamePhase.Ongoing, player1Name, player2Name, currentPlayer, []);
+        setPlayers((prevPlayers) => {
+            const newPlayers = {...prevPlayers};
+            Object.keys(newPlayers).forEach((playerName) => {
+                newPlayers[playerName].score = 0;
+            });
+            return newPlayers;
+        });
+        persistGameState(GamePhase.Ongoing, players, currentPlayer, []);
     }
 
     const endRoundWithAWinner = (winner: string, points: number) => {
         const lastRound = getLastRound();
 
-        const previousPlayer1Score = lastRound?.player1Score ?? 0;
-        const previousPlayer2Score = lastRound?.player2Score ?? 0;
+        let newRound: Round;
+        let winnerNewScore: number;
+        if (lastRound === null) {
+            winnerNewScore = points;
+            newRound = {
+                scores: {...(generateRoundDefaultScores()), [winner]: points},
+                winner,
+            }
+        }
+        else {
+            winnerNewScore = lastRound.scores[winner] + points;
+            newRound = {
+                scores: {...lastRound.scores, [winner]: winnerNewScore},
+                winner,
+            }
+        }
 
-        const player1NewScore = winner === player1Name ? previousPlayer1Score + points : previousPlayer1Score;
-        const player2NewScore = winner === player2Name ? previousPlayer2Score + points : previousPlayer2Score;
-
-        const newRounds = [...rounds, {
-            player1Score: player1NewScore,
-            player2Score: player2NewScore,
-            winner
-        }];
+        const newRounds = [...rounds, newRound];
         setRounds(newRounds);
+
+        const newPlayers = {
+            ...players,
+            [winner]: {
+                ...players[winner],
+                score: winnerNewScore,
+            },
+        };
+        setPlayers(newPlayers);
+
         const currentPlayer = togglePlayer();
 
-        persistGameState(phase, player1Name, player2Name, currentPlayer, newRounds);
+        persistGameState(phase, newPlayers, currentPlayer, newRounds);
 
-        if (player1NewScore >= 100 || player2NewScore >= 100) {
+        if (winnerNewScore >= 100) {
             finishGame();
         }
 
-        return winner === player1Name ? player1NewScore : player2NewScore;
+        return winnerNewScore;
     }
 
     const endRoundWithADraw = () => {
         const lastRound = getLastRound();
-        const newRounds = [...rounds, {
-            player1Score: lastRound === null ? 0 : lastRound.player1Score,
-            player2Score: lastRound === null ? 0 : lastRound.player2Score,
-            winner: null
-        }];
+
+        let newRound: Round;
+        if (lastRound === null) {
+            newRound = {
+                scores: generateRoundDefaultScores(),
+                winner: null,
+            }
+        }
+        else {
+            newRound = {
+                scores: lastRound.scores,
+                winner: null,
+            }
+        }
+
+        const newRounds = [...rounds, newRound];
         setRounds(newRounds);
 
         const currentPlayer = togglePlayer();
 
-        persistGameState(phase, player1Name, player2Name, currentPlayer, newRounds);
+        persistGameState(phase, players, currentPlayer, newRounds);
+    }
+
+    function generateRoundDefaultScores() {
+        const playersDefaultScores: RoundScores = Object.entries(players).reduce((acc, [playerName]) => {
+            acc[playerName] = 0;
+            return acc;
+        }, {} as RoundScores);
+        return playersDefaultScores;
     }
 
     const getLastRound = useCallback((): null | Round => rounds.length > 0 ? rounds[rounds.length - 1] : null, [rounds]);
@@ -110,31 +161,31 @@ const useGame = () => {
     }
 
     const togglePlayer = (): string => {
-        const newPlayer = currentPlayer === player1Name ? player2Name : player1Name;
+        const playerNames = Object.keys(players);
+        const currentPlayerIndex = playerNames.indexOf(currentPlayer);
+        const nextPlayerIndex = (currentPlayerIndex + 1) % playerNames.length;
+        const newPlayer = playerNames[nextPlayerIndex];
         setCurrentPlayer(newPlayer);
 
         return newPlayer;
     }
 
-    const player1Score = useMemo(() => getLastRound()?.player1Score ?? 0, [getLastRound]);
-    const player2Score = useMemo(() => getLastRound()?.player2Score ?? 0, [getLastRound]);
+    // const player1Score = useMemo(() => getLastRound()?.player1Score ?? 0, [getLastRound]);
+    // const player2Score = useMemo(() => getLastRound()?.player2Score ?? 0, [getLastRound]);
 
     return {
         phase,
-        player1Name,
-        player2Name,
+        players,
         rounds,
         launchGame,
         endRoundWithAWinner,
         endRoundWithADraw,
         currentPlayer,
-        player1Score,
-        player2Score,
         isResumingGame,
         setIsResumingGame,
         launchNewGameWithSamePlayers,
     }
 }
 
-export type {Round, GameState};
+export type {Round, GameState, Players, Player};
 export {useGame, GamePhase}

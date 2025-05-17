@@ -50,7 +50,10 @@ const RoundScoreDialog = ({close, roundWinner, saveWinnerScore}: Props) => {
             <DialogContent>
                 <TextField
                     inputRef={input => input && input.focus()}
-                    inputProps={{min: 0, max: 240, style: {textAlign: 'center', fontSize: '1.3rem'}}}
+                    sx={{textAlign: 'center', fontSize: '1.3rem'}}
+                    slotProps={{
+                        htmlInput: {min:0 , max: 240, step: 5},
+                    }}
                     required
                     margin="dense"
                     name="score"

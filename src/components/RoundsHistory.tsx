@@ -4,34 +4,44 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Round} from "../hooks/useGame";
+import {Players, Round} from "../hooks/useGame";
 
 type Props = {
     rounds: Round[];
-    player1Name: string;
-    player2Name: string;
+    players: Players;
 }
 
-export default function RoundsHistory({ rounds, player1Name, player2Name }: Props) {
+export default function RoundsHistory({ rounds, players }: Props) {
     return (
         <Table size="small">
             <TableHead>
                 <TableRow>
-                    <TableCell width={20}>Manche</TableCell>
-                    <TableCell align="center">{player1Name}</TableCell>
-                    <TableCell align="center">{player2Name}</TableCell>
+                    <TableCell width={20} align="center">#</TableCell>
+                    {Object.values(players).map((player, index) => (
+                        <TableCell key={index} align="center" width={50}>
+                            {player.name}
+                        </TableCell>
+                    ))}
                 </TableRow>
             </TableHead>
             <TableBody>
                 {rounds.map((round, index) => (
                     <TableRow key={index} sx={index % 2 !== 0 ? { backgroundColor: 'action.hover' } : {}} data-testid="roundHistoryEntry">
                         <TableCell align="center">{index + 1}</TableCell>
-                        <TableCell align="center" sx={{fontWeight : round.winner === player1Name ? 'bold' : 'normal'}}>
-                            {round.player1Score}
-                        </TableCell>
-                        <TableCell align="center" sx={{fontWeight : round.winner === player2Name ? 'bold' : 'normal'}}>
-                            {round.player2Score}
-                        </TableCell>
+                        {Object.values(players).map((player, index) => {
+                            const playerName = player.name;
+                            return (
+                                <TableCell key={index} align="center" sx={{fontWeight : round.winner === playerName ? 'bold' : 'normal'}}>
+                                    {round.scores[playerName]}
+                                </TableCell>
+                            )
+                        })}
+                        {/*<TableCell align="center" sx={{fontWeight : round.winner === player1Name ? 'bold' : 'normal'}}>*/}
+                        {/*    {round.player1Score}*/}
+                        {/*</TableCell>*/}
+                        {/*<TableCell align="center" sx={{fontWeight : round.winner === player2Name ? 'bold' : 'normal'}}>*/}
+                        {/*    {round.player2Score}*/}
+                        {/*</TableCell>*/}
                     </TableRow>
                 ))}
             </TableBody>

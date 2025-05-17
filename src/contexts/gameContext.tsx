@@ -1,17 +1,14 @@
 import React, {createContext, useContext} from 'react';
-import {useGame, GamePhase, Round} from '../hooks/useGame';
+import {useGame, GamePhase, Round, Player} from '../hooks/useGame';
 
 interface GameContextType {
     phase: GamePhase;
-    player1Name: string;
-    player2Name: string;
+    players: {[playerName: string]: Player};
     rounds: Round[];
-    launchGame: (player1Name: string, player2Name: string) => void;
+    launchGame: (playerNames: string[]) => void;
     endRoundWithAWinner: (winner: string, points: number) => number;
     endRoundWithADraw: () => void;
     currentPlayer: string;
-    player1Score: number;
-    player2Score: number;
     isResumingGame: boolean;
     setIsResumingGame: (isResumingGame: boolean) => void;
     launchNewGameWithSamePlayers: () => void;
@@ -19,15 +16,12 @@ interface GameContextType {
 
 const GameContext = createContext<GameContextType>({
     phase: GamePhase.Initialization,
-    player1Name: '',
-    player2Name: '',
+    players: {},
     rounds: [],
-    launchGame: (player1Name: string, player2Name: string) => {},
+    launchGame: (playerNames: string[]) => {},
     endRoundWithAWinner: () => 0,
     endRoundWithADraw: () => {},
     currentPlayer: '',
-    player1Score: 0,
-    player2Score: 0,
     isResumingGame: false,
     setIsResumingGame: () => {},
     launchNewGameWithSamePlayers: () => {},

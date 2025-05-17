@@ -63,7 +63,7 @@ export default function Header() {
             <img
                 src={HeaderImage}
                 width="100%"
-                height="170px"
+                height="150px"
                 style={{margin: "2px auto 16px auto", objectFit: "cover"}}
                 alt='Header'
             />

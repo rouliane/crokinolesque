@@ -23,14 +23,14 @@ const style = {
 };
 
 const HistoryModal = ({close, open}: Props) => {
-    const {player1Name, player2Name, rounds} = useGameContext();
+    const {players, rounds} = useGameContext();
 
     return (
         <Modal onClose={close} open={open}>
             <Box sx={style}>
                 <Typography variant="h6" textAlign="center">Historique</Typography>
                 <TableContainer sx={{ marginTop: 2 }}>
-                    <RoundsHistory rounds={rounds} player1Name={player1Name} player2Name={player2Name} />
+                    <RoundsHistory rounds={rounds} players={players} />
                 </TableContainer>
             </Box>
         </Modal>

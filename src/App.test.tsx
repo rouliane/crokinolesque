@@ -48,8 +48,10 @@ test('happy path', async () => {
 test('A game can be resumed and the players will be notified', async () => {
     localStorage.setItem('gameState', JSON.stringify({
         phase: GamePhase.Ongoing,
-        player1Name: 'Player 1',
-        player2Name: 'Player 2',
+        players: {
+            'Player 1': {name: 'Player 1', score: 50},
+            'Player 2': {name: 'Player 2', score: 20},
+        },
         currentPlayer: 'Player 2',
         rounds: [
             {player1Score: 50, player2Score: 0, winner: 'Player 1'},

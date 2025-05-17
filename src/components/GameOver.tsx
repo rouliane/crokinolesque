@@ -14,12 +14,11 @@ type Props = {
 }
 
 export default function GameOver({notifyFirstPlayer}: Props) {
-    const {rounds, player1Name, player2Name, launchNewGameWithSamePlayers} = useGameContext();
+    const {rounds, players, launchNewGameWithSamePlayers} = useGameContext();
 
     const lastRound = rounds[rounds.length - 1];
-    const winnerName = lastRound.player1Score > lastRound.player2Score ? player1Name : player2Name;
-    const winnerScore = Math.max(lastRound.player1Score, lastRound.player2Score);
-    const looserScore = Math.min(lastRound.player1Score, lastRound.player2Score);
+    const winnerScore = Math.max(...Object.values(lastRound.scores));
+    const looserScore = Math.min(...Object.values(lastRound.scores));
 
     const launchANewGameWithTheSamePlayers = () => {
         launchNewGameWithSamePlayers();
@@ -31,7 +30,7 @@ export default function GameOver({notifyFirstPlayer}: Props) {
             <Typography variant="h5" mb={4} color="success.main">
                 <Stack direction="row" alignItems="center" justifyContent="center" gap={1}>
                     <CelebrationIcon/>
-                    {winnerName} a gagné {winnerScore} - {looserScore}
+                    {lastRound.winner} a gagné {winnerScore} - {looserScore}
                 </Stack>
             </Typography>
 
@@ -43,7 +42,7 @@ export default function GameOver({notifyFirstPlayer}: Props) {
             <Typography variant="h6" mt={5}>Historique</Typography>
 
             <TableContainer sx={{marginTop: 2, marginBottom: 2}}>
-                <RoundsHistory rounds={rounds} player1Name={player1Name} player2Name={player2Name}/>
+                <RoundsHistory rounds={rounds} players={players}/>
             </TableContainer>
         </Container>
     );
